@@ -62,11 +62,15 @@ var userSchema = new mongoose.Schema({
 });
 
 
-// không áp dụng với api update , hash password
-userSchema.pre('save', async function(next){
-    const salt = bcrypt.genSaltSync(10)
-    this.password = await bcrypt.hashSync(this.password, salt)
-})
 
-// Xuất mô hình User để sử dụng trong các phần khác của ứng dụng
+userSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) {
+        return next();
+    }
+    const salt = bcrypt.genSaltSync(10);
+
+    this.password = await bcrypt.hashSync(this.password, salt);
+    
+    next();
+});
 module.exports = mongoose.model('User', userSchema);
