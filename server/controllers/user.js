@@ -5,8 +5,6 @@ const asyncHandler = require('express-async-handler'); // Import middleware đ�
 const register = asyncHandler(async (req, res) => {
     // Lấy các trường từ body của yêu cầu
     const { email, password, firstname, lastname } = req.body;
-
-
     // Kiểm tra xem tất cả các trường có được cung cấp hay không
     if (!email || !password || !firstname || !lastname) {
         // Nếu thiếu trường nào, trả về phản hồi lỗi

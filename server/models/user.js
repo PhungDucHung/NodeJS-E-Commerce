@@ -1,4 +1,5 @@
 const mongoose = require('mongoose'); // Import thư viện Mongoose để tương tác với MongoDB
+const bcrypt = require('bcrypt');
 
 // Khai báo Schema của mô hình MongoDB
 var userSchema = new mongoose.Schema({
@@ -59,6 +60,13 @@ var userSchema = new mongoose.Schema({
 }, {
     timestamps: true // Tự động thêm các trường `createdAt` và `updatedAt` vào mô hình
 });
+
+
+// không áp dụng với api update , hash password
+userSchema.pre('save', async function(next){
+    const salt = bcrypt.genSaltSync(10)
+    this.password = await bcrypt.hashSync(this.password, salt)
+})
 
 // Xuất mô hình User để sử dụng trong các phần khác của ứng dụng
 module.exports = mongoose.model('User', userSchema);
