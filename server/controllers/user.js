@@ -6,22 +6,25 @@ const register = asyncHandler(async (req, res) => {
     // Lấy các trường từ body của yêu cầu
     const { email, password, firstname, lastname } = req.body;
     // Kiểm tra xem tất cả các trường có được cung cấp hay không
-    if (!email || !password || !firstname || !lastname) {
+    if (!email || !password || !firstname || !lastname) 
         // Nếu thiếu trường nào, trả về phản hồi lỗi
         return res.status(404).json({
             success: false,
             message: 'Missing inputs'
         });
-    }
 
-    // Tạo người dùng mới với thông tin từ yêu cầu
-    const response = await User.create(req.body);
+        // kiểm tra email đã tồn tại chưa
+        const user = await User.findOne({email});
+        if(user)
+            throw new Error('User not existed');
+        else{
+            const newUser = await User.create(req.body);
 
-    // Trả về phản hồi thành công với thông tin người dùng mới
-    return res.status(200).json({
-        success: response ? true : false,
-        response
-    });
+            return res.status(200).json({
+                success: newUser ? true : false, 
+                message: newUser ? 'Register is successfully. please go login' : 'Something went wrong'
+            });
+        }
 });
 
 module.exports = {
