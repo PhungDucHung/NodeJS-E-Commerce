@@ -4,5 +4,7 @@ const ctrls = require('../controllers/user'); // Import controller chứa các h
 
 // Định nghĩa route POST cho việc đăng ký người dùng
 router.post('/register', ctrls.register);
+router.post('/login', ctrls.login);
+
 
 module.exports = router;

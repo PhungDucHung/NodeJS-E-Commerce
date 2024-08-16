@@ -1,7 +1,6 @@
 const User = require('../models/user'); // Import mô hình User từ thư mục models
 const asyncHandler = require('express-async-handler'); // Import middleware để xử lý các lỗi bất đồng bộ
 
-// Hàm xử lý đăng ký người dùng
 const register = asyncHandler(async (req, res) => {
     // Lấy các trường từ body của yêu cầu
     const { email, password, firstname, lastname } = req.body;
@@ -27,6 +26,29 @@ const register = asyncHandler(async (req, res) => {
         }
 });
 
+
+const login = asyncHandler(async (req, res) => {
+    const { email, password} = req.body;
+    if (!email || !password ) 
+        return res.status(400).json({
+            success: false,
+            message: 'Missing inputs'
+        });
+
+        const response = await User.findOne({email});
+        if (response && await response.isCorrectPassword(password)) {
+            const{ password, role, ...userData } = response.toObject()  // response.toObject() trả về object thuần
+            return res.status(200).json({
+                success: true,
+                userData
+            });
+        }else{
+            throw new Error('Invalid credentials !')
+        }
+});
+
+
+
 module.exports = {
-    register
+    register, login
 };
