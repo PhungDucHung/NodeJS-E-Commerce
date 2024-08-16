@@ -2,8 +2,12 @@ const express = require('express');
 require('dotenv').config();
 const dbConnect = require('./server/config/dbconnect')
 const initRoutes = require('./server/routes');
+const cookieParser = require('cookie-parser');
+
+
 
 const app = express();
+app.use(cookieParser());
 const port = process.env.PORT || 8888;
 
 // Middleware để phân tích dữ liệu JSON trong các yêu cầu
