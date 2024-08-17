@@ -12,6 +12,8 @@ router.get('/logout', ctrls.logout)
 router.get('/forgotpassword', ctrls.forgotPassword)
 router.put('/resetpassword', ctrls.resetPassword)
 router.get('/', [verifyAccessToken, isAdmin], ctrls.getUsers)
+router.delete('/', [verifyAccessToken, isAdmin], ctrls.deleteUser)
+
 
 
 

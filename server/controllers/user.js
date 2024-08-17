@@ -146,6 +146,16 @@ const getUsers = asyncHandler(async (req, res) => {
     })
 })
 
+const deleteUser = asyncHandler(async (req, res) => {
+    const { _id } = req.query
+    if (!_id) throw new Error('Missing inputs')
+    const response = await User.findByIdAndDelete(_id)
+    return res.status(200).json({
+        success: response ? true : false,
+        deletedUser: response ? `User with email ${response.email} deleted` : 'No user delete'
+    })
+})
+
 module.exports = {
-    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword ,getUsers
+    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword ,getUsers ,deleteUser
 };
