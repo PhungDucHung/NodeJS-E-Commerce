@@ -121,9 +121,24 @@ const forgotPassword = asyncHandler(async (req, res) => {
     })
 })
 
-
+const resetPassword = asyncHandler(async (req, res) => {
+    const { password, token } = req.body
+    if (!password || !token) throw new Error('Missing inputs')
+    const passwordResetToken = crypto.createHash('sha256').update(token).digest('hex')
+    const user = await User.findOne({ passwordResetToken, passwordResetExpires: { $gt: Date.now() } })
+    if (!user) throw new Error('Invalid reset token')
+    user.password = password
+    user.passwordResetToken = undefined
+    user.passwordChangedAt = Date.now()
+    user.passwordResetExpires = undefined
+    await user.save()
+    return res.status(200).json({
+        success: user ? true : false,
+        mes: user ? 'Updated password' : 'Something went wrong'
+    })
+})
 
 
 module.exports = {
-    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword
+    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword
 };
