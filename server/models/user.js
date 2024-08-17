@@ -39,10 +39,10 @@ var userSchema = new mongoose.Schema({
         ref: 'Address' // Tham chiếu đến mô hình Address
     }],
     wishlist: [{
-        type: mongoose.Types.ObjectId, // Liên kết đến đối tượng Product
-        ref: 'Product' // Tham chiếu đến mô hình Product
+        type: mongoose.Types.ObjectId, 
+        ref: 'Product' 
     }],
-    isBlocked: {
+    isBlocked: {        // khóa chức năng người dùng
         type: Boolean,
         default: false, 
     },
