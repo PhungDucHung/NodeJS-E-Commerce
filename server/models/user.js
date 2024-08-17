@@ -1,5 +1,6 @@
 const mongoose = require('mongoose'); // Import thư viện Mongoose để tương tác với MongoDB
 const bcrypt = require('bcrypt');
+const crypto = require('crypto')
 
 // Khai báo Schema của mô hình MongoDB
 var userSchema = new mongoose.Schema({
@@ -74,6 +75,17 @@ userSchema.pre('save', async function(next) {
 userSchema.methods = {
     isCorrectPassword: async function (password) {
         return await bcrypt.compare(password, this.password)
+    },
+    createPasswordChangedToken: function () {
+        // Tạo một token ngẫu nhiên với kích thước 32 byte và chuyển đổi nó thành định dạng hex
+        const resetToken = crypto.randomBytes(32).toString('hex');       
+        // Mã hóa token ngẫu nhiên bằng thuật toán SHA-256 và lưu trữ hash trong thuộc tính passwordResetToken
+        // Điều này bảo vệ token gốc khỏi bị lộ, vì chỉ lưu trữ hash của token
+        this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        // Xác định thời gian hết hạn của token (15 phút kể từ thời điểm hiện tại)
+        this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+        // Trả về token gốc để gửi cho người dùng qua email hoặc các phương tiện khác
+        return resetToken;
     }
 }
 
