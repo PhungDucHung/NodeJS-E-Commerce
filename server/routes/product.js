@@ -5,7 +5,7 @@ const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken')
 router.post('/', [verifyAccessToken, isAdmin], ctrls.createProduct)
 router.get('/', ctrls.getProducts)
 
-
-
 router.get('/:pid', ctrls.getProduct)
+router.put('/:pid', [verifyAccessToken, isAdmin], ctrls.updateProduct)
+
 module.exports = router
