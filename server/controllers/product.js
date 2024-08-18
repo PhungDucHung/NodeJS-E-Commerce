@@ -21,7 +21,16 @@ const getProduct = asyncHandler(async (req, res) => {
     })
 })
 
+// Filtering, sorting & pagination
+const getProducts = asyncHandler(async (req, res) => {
+    const products = await Product.find()
+    return res.status(200).json({
+        success: products ? true : false,
+        productDatas: products ? products : 'Cannot get products'
+    })
+})
+
 module.exports = {
-    createProduct,getProduct
+    createProduct, getProduct, getProducts
 
 }
