@@ -7,5 +7,7 @@ router.get('/', ctrls.getProducts)
 
 router.get('/:pid', ctrls.getProduct)
 router.put('/:pid', [verifyAccessToken, isAdmin], ctrls.updateProduct)
+router.delete('/:pid', [verifyAccessToken, isAdmin], ctrls.deleteProduct)
+
 
 module.exports = router
