@@ -48,34 +48,36 @@ const getProducts = asyncHandler(async (req, res) => {
         queryCommand = queryCommand.sort(sortBy);
     }
 
-    // Xử lý chọn fields
+    // Xử lý fields limiting
     if (req.query.fields) {
         const fields = req.query.fields.split(',').join(' ');
         queryCommand = queryCommand.select(fields);
     }
 
-    // Xử lý phân trang ( paginate )
-    const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 10;
-    const skip = (page - 1) * limit;
+      // Xử lý phân trang
+      const page = +req.query.page || 1; // Chuyển đổi page thành số, mặc định là 1 nếu không được cung cấp
+      const limit = +req.query.limit || +process.env.LIMIT_PRODUCTS; // Chuyển đổi limit thành số, mặc định từ biến môi trường
+      const skip = (page - 1) * limit; // Tính số lượng tài liệu cần bỏ qua
+  
+      queryCommand = queryCommand.skip(skip).limit(limit); // Áp dụng phân trang cho truy vấn
+  
+      try {
+          // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
+          const products = await queryCommand.exec();
+          const count = await Product.countDocuments(formattedQueries);
+  
+          return res.status(200).json({
+              success: products.length > 0,
+              counts: count,
+              products: products.length > 0 ? products : 'Không thể lấy sản phẩm'
+          });
+      } catch (err) {
+          // Xử lý lỗi và trả về mã trạng thái 500 với thông báo lỗi
+          return res.status(500).json({ success: false, message: err.message });
+      }
+  });
 
-    queryCommand = queryCommand.skip(skip).limit(limit);
 
-    try {
-        // Thực hiện truy vấn và số lượng sản phẩm thỏa mãn điều kiện !== số lượng sản phẩm trả về 1 lần gọi api
-        const products = await queryCommand.exec();
-        const count = await Product.countDocuments(formattedQueries);
-
-        return res.status(200).json({
-            success: products.length > 0,
-            products: products,
-            count
-        });
-    } catch (err) {
-        // Xử lý lỗi
-        return res.status(500).json({ success: false, message: err.message });
-    }
-});
 
 
 const updateProduct = asyncHandler(async (req, res) => {
