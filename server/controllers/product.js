@@ -99,7 +99,35 @@ const deleteProduct = asyncHandler(async (req, res) => {
     })
 })
 
-module.exports = {
-    createProduct, getProduct, getProducts ,updateProduct, deleteProduct
+const ratings = asyncHandler(async(req, res) => {
+    const {_id} = req.user
+    const { star , comment , pid } = req.body
+    if (!star || !pid) throw new Error('Missing inputs')
+    const ratingProduct = await Product.findById(pid)
+    const alreadyRating = ratingProduct?.ratings?.find(el => el.postedBy.toString() === _id)
+    // console.log({alreadyRating})
+    if (alreadyRating){
+        // update start & comment
+        await Product.updateOne({
+            ratings: { $elemMatch: alreadyRating }
+        },{
+            $set: {"ratings.$.star":star,"ratings.$.comment": comment}
+        },{new: true })
+    }else{
+        // add star & comment
+         await Product.findByIdAndUpdate(pid, {
+            $push: {ratings: {star, comment, postedBy: _id}}
+        },{new: true})
+        console.log(response)
+    }
 
+    // Sum ratings
+
+    return res.status(200).json({
+        status: true
+    })
+})
+
+module.exports = {
+    createProduct, getProduct, getProducts ,updateProduct, deleteProduct, ratings
 }

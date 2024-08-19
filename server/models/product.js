@@ -53,6 +53,7 @@ var productSchema = new mongoose.Schema({
             comment: { type: String }
         }
     ],
+    // số điểm đánh giá sản phẩm
     totalRatings: {
         type: Number,
         default: 0
