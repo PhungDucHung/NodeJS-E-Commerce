@@ -94,6 +94,26 @@ const dislikeBlog = asyncHandler(async(req, res)=>{
     }
 });
 
+const getBlog = asyncHandler(async(req, res) =>{
+    const {bid} = req.params
+    const blog = await Blog.findByIdAndUpdate(bid, { $inc: {numberViews: 1}}, {new:true})
+    .populate('likes','firstname lastname')
+    .populate('dislikes', 'firstname lastname') // kết nối với bảng khác
+    return res.json({
+        success: blog ? true: false,
+        rs: blog
+    })
+})
+
+const deleteBlog = asyncHandler(async(req, res) =>{
+    const {bid} = req.params
+    const blog = await Blog.findByIdAndDelete(bid)
+    return res.json({
+        success: blog ? true: false,
+        deletedBlog: blog || 'Something went wrong'
+    })
+})
+
 module.exports = {
-    createNewBlog , updateBlog, getBlogs , likeBlog , dislikeBlog
+    createNewBlog , updateBlog, getBlogs , likeBlog , dislikeBlog ,getBlog ,deleteBlog
 }
