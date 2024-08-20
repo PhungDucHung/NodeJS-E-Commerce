@@ -14,7 +14,7 @@ const getCategories = asyncHandler(async(req,res)=>{
     const response = await BlogCategory.find().select('title _id')
     return res.json({
         success: response ? true : false,
-        blogCategories: response ? response: 'Cannot create new blog-category'
+        blogCategories: response ? response: 'Cannot get blog-category'
     })
 })
 
