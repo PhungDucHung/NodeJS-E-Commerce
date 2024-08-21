@@ -176,8 +176,48 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
         updatedUser: response ? response : 'Some thing went wrong'
     })
 })
+const updateUserAddress = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    if (!req.body.address) throw new Error('Missing inputs');
+    // Đảm bảo địa chỉ là mảng, nếu không thì biến nó thành mảng
+    const newAddress = Array.isArray(req.body.address) ? req.body.address : [req.body.address];
+    // Tìm người dùng và lấy thông tin địa chỉ hiện tại
+    const user = await User.findById(_id).select('address');
+    if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    // Tạo một mảng để lưu các địa chỉ cần xóa
+    const addressesToRemove = [];
+    // Duyệt qua địa chỉ mới và kiểm tra xem có trùng lặp với địa chỉ hiện tại không
+    newAddress.forEach(address => {
+        if (user.address.includes(address)) {
+            addressesToRemove.push(address);
+        }
+    });
+    // Nếu có địa chỉ trùng lặp, xóa chúng khỏi mảng address
+    if (addressesToRemove.length > 0) {
+        await User.findByIdAndUpdate(
+            _id,
+            { $pullAll: { address: addressesToRemove } }
+        );
+    }
+    // Thêm các địa chỉ mới vào mảng address
+    const response = await User.findByIdAndUpdate(
+        _id,
+        { $push: { address: { $each: newAddress } } },
+        { new: true }
+    ).select('-password -role -refreshToken');
+    // Đảm bảo không có mảng con trong address
+    if (response) {
+        response.address = response.address.flat();
+    }
+    return res.status(200).json({
+        success: response ? true : false,
+        updatedUser: response ? response : 'Something went wrong'
+    });
+});
 
 module.exports = {
     register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword ,getUsers ,deleteUser ,updateUser
-    ,updateUserByAdmin
+    ,updateUserByAdmin , updateUserAddress
 };

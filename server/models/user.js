@@ -35,8 +35,8 @@ var userSchema = new mongoose.Schema({
         default: [], // Giá trị mặc định là mảng rỗng nếu không cung cấp
     },
     address: [{
-        type: mongoose.Types.ObjectId, // Liên kết đến đối tượng Address
-        ref: 'Address' // Tham chiếu đến mô hình Address
+        type: Array,
+        default: [], 
     }],
     wishlist: [{
         type: mongoose.Types.ObjectId, 
