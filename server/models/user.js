@@ -30,10 +30,12 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: 'user', // Giá trị mặc định là 'user' nếu không cung cấp
     },
-    cart: {
-        type: Array,
-        default: [], // Giá trị mặc định là mảng rỗng nếu không cung cấp
-    },
+    cart: [{
+        product: {type: mongoose.Types.ObjectId,  ref: 'Product'  },
+        quantity: Number,
+        color: String,
+        
+    }],
     address: [{
         type: Array,
         default: [], 
