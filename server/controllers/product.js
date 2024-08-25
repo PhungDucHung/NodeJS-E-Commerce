@@ -146,5 +146,5 @@ const uploadImagesProduct = asyncHandler(async(req, res) => {
 })
 
 module.exports = {
-    createProduct, getProduct, getProducts ,updateProduct, deleteProduct, ratings, uploadImagesProduct
+    createProduct, getProduct, getProducts ,updateProduct, deleteProduct, ratings, uploadImagesProduct 
 }
