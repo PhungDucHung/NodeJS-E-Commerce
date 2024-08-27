@@ -2,9 +2,6 @@ import React from 'react'
 import {navigation} from '../ultils/contants'
 import { NavLink } from 'react-router-dom'
 
-const notActivedStyle = ''
-const activedStyle = ''
-
 const Navigation = () => {
   return (
     <div className='w-main h-[48px] py-2 border-y mb-6 text-sm flex items-center '>
