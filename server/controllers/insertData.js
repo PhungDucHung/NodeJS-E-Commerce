@@ -21,7 +21,9 @@ const fn = async (product) => {
         quantity: Math.round(Math.random() * 1000),
         sold: Math.round(Math.random() * 100),
         images: product?.images,
-        color: color // Đảm bảo giá trị color được cung cấp
+        color: color,
+        thumb: product?.thumb
+
     });
 }
 

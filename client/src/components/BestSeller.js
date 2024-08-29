@@ -20,15 +20,26 @@ const BestSeller = () => {
     const [bestSellers, setBestSellers] = useState(null)
     const [newProducts, setNewProducts] = useState(null)
     const [activedTab, setActivedTab] = useState(1)
+    const [products, setProducts] = useState(null)
+
   
     const fetchProducts = async () => {
         const response = await Promise.all([apiGetProducts({sort:'-sold'}),apiGetProducts({sort: '-createdAt'})])
-        if (response[0]?.success) setBestSellers(response[0].products)
+        if (response[0]?.success){
+            setBestSellers(response[0].products)
+            setProducts(response[0].products)
+        } 
         if (response[1]?.success) setNewProducts(response[1].products)
+        setProducts(response[0].products)
     }
     useEffect(() => {
       fetchProducts()
     },[])
+
+    useEffect(() => {
+        if(activedTab === 1) setProducts(bestSellers)
+        if(activedTab === 2) setProducts(newProducts)    
+    },[activedTab])
 
     return (
         <div>
@@ -43,12 +54,13 @@ const BestSeller = () => {
                     </span>
                 ))} 
             </div>
-            <div className='mt-4'>
+            <div className='mt-4 mx-[-10px]'>
             <Slider {...settings}>
-                {bestSellers?.map(el => (
+                {products?.map(el => (
                     <Product
                         key={el.id}
                         productData={el}
+                        isNew={activedTab === 1 ? false : true}
                     />
                 ))}
             </Slider>
