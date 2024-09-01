@@ -35,18 +35,11 @@ const Product = ({productData, isNew }) => {
               <img 
                   src={isNew ? label : labelGreen} 
                   alt='' 
-                  className={`absolute w-[100px] h-[25px] top-[-10px] left-[180px] object-cover`}
+                  className={`absolute w-[100px] h-[25px] top-[-10px] left-[160px] object-cover`}
                 />
-      
-                </div>
-                <div className='flex flex-col gap-1 mt-[15px] justify-start w-full '>
-                    <span className='flex h-4'>{renderStarFromNumber(productData?.totalRatings)}</span>
-                    <span className='line-clamp-1'>{productData?.title}</span>
-                    <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
                 </div>
         </div>
     </div>
   )
 }
-
 export default Product
