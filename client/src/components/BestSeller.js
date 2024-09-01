@@ -9,7 +9,7 @@ const tabs = [
 ]
 
 var settings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: 3,
@@ -59,6 +59,7 @@ const BestSeller = () => {
                 {products?.map(el => (
                     <Product
                         key={el.id}
+                        pid={el.id}
                         productData={el}
                         isNew={activedTab === 1 ? false : true}
                     />
