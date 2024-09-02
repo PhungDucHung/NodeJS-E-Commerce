@@ -47,7 +47,7 @@ const BestSeller = () => {
                 { tabs.map(el => (
                     <span 
                         key={el.id} 
-                        className={`font-semibold capitalize border-r cursor-pointer text-gray-400 ${activedTab === el.id ? 'text-gray-900' : ''}`}
+                        className={`font-semibold uppercase border-r cursor-pointer text-gray-400 ${activedTab === el.id ? 'text-gray-900' : ''}`}
                         onClick={() => setActivedTab(el.id)}
                     >
                     {el.name}

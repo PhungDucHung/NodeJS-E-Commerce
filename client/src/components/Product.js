@@ -38,6 +38,11 @@ const Product = ({productData, isNew }) => {
                   className={`absolute w-[100px] h-[25px] top-[-10px] left-[160px] object-cover`}
                 />
                 </div>
+                <div className='flex flex-col mt-[15px] items-start gap-1 w-full'>
+                    <span className='flex h-4'>{renderStarFromNumber(productData?.totalRatings)}</span>
+                    <span className='line-clamp-1 pt-2'>{productData?.title}</span>
+                    <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
+                </div>
         </div>
     </div>
   )

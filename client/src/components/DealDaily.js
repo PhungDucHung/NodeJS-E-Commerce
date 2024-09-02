@@ -31,10 +31,6 @@ const [expireTime, setExpireTime] = useState(false)
         }
     }
 
-    // useEffect(() => {
-    //     fetchDealDaily()
-    // },[])
-
     useEffect(() => {
        clearInterval(idInterval)
        fetchDealDaily()
@@ -72,7 +68,7 @@ const [expireTime, setExpireTime] = useState(false)
             <span className='flex-8 font-semi-bold text-[17px] flex justify-center text-gray-600'>DEAL DAILY</span>
             <span className='flex-1'></span>
         </div>
-        <div className='w-full flex flex-col items-center pt-8 px-4 gap-2'>
+        <div className='w-full flex flex-col items-center px-4 gap-2'>
         <img 
             src={dealdaily?.thumb || 'https://niteair.co.uk/wp-content/uploads/2023/08/default-product-image.png'} alt='' className='w-full object-contain' 
         />                    
@@ -80,7 +76,7 @@ const [expireTime, setExpireTime] = useState(false)
             <span className='flex h-4'>{renderStarFromNumber(dealdaily?.totalRatings, 20)}</span>
             <span>{`${formatMoney(dealdaily?.price)} VNĐ`}</span>
         </div>
-        <div className='px-4 mt-6 '>
+        <div className='px-4 mt-4 '>
             <div className='flex justify-center gap-2 items-center'>
                 <Countdown unit={'Hours'} number={hour}/>
                 <Countdown unit={'Minutes'} number={minute}/>
