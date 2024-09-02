@@ -17,7 +17,7 @@ const data = [
     {
         cate: 'Speaker',
         brand: [],
-        image: 'https://cdn-amz.woka.io/images/I/51KZcUQIyiS.jpg'
+        image: 'https://digital-world-2.myshopify.com/cdn/shop/products/z2_2_400x.jpg?v=1491404907'
     },
     {
         cate: 'Camera',

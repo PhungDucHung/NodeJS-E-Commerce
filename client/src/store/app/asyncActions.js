@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import * as apis from '../apis/index'
+import * as apis from '../../apis/index'
 
 
 export const getCategories = createAsyncThunk('app/categories', async(data, {rejectWithValue}) => {

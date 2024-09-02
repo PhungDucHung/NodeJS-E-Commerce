@@ -36,8 +36,9 @@ const insertProduct = asyncHandler(async(req,res)=>{
 
 const fn2 = async (cate) => {
     await ProductCategory.create({
-        title: cate?.cate + Math.round(Math.random() * 10000) + ' ',
-        brand: cate?.brand + Math.round(Math.random() * 10000) + ' ',
+        title: cate?.cate,
+        brand: cate?.brand,
+        image: cate?.image 
     })
 }
 

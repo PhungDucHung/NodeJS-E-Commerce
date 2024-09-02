@@ -9,5 +9,7 @@ export { default as DealDaily} from './DealDaily';
 export { default as Countdown} from './Countdown';
 export { default as FeatureProducts} from './FeatureProducts';
 export { default as ProductCard} from './ProductCard';
+export { default as CustomSlider} from './CustomSlider';
+
 
 
