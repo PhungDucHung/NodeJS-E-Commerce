@@ -15,7 +15,6 @@ const BestSeller = () => {
     const [products, setProducts] = useState(null)
     const dispatch = useDispatch()
     const {newProducts} = useSelector(state => state.products)
-    console.log(newProducts)
 
     const fetchProducts = async () => {
         const response = await apiGetProducts({sort:'-sold'})
@@ -23,7 +22,6 @@ const BestSeller = () => {
             setBestSellers(response.products)
             setProducts(response.products)
         } 
-
     }
     useEffect(() => {
       fetchProducts()
