@@ -56,7 +56,10 @@ var userSchema = new mongoose.Schema({
     },
     passwordResetExpires: {
         type: String,
-    }
+    },
+    registerToken: {
+        type: String,
+    },
 }, {
     timestamps: true // Tự động thêm các trường `createdAt` và `updatedAt` vào mô hình
 });
