@@ -4,6 +4,9 @@ import { Login, Home, Public, FAQ, Services, DetailProduct, Blogs, Products, Fin
 import path from './ultils/path';
 import { getCategories } from './store/app/asyncActions';
 import { useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
   // Khai báo dispatch từ useDispatch hook
@@ -29,7 +32,20 @@ function App() {
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />} />
         <Route path={path.LOGIN} element={<Login />} />
       </Routes>
-    </div>
+      <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          />
+      <ToastContainer />
+          </div>
   );
 }
 
