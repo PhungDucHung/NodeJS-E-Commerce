@@ -8,7 +8,7 @@ export const userSlice = createSlice({
     token: null
   },
   reducers: {
-    register: (state, action) => { // Sửa lỗi chính tả từ 'regiser' thành 'register'
+    login: (state, action) => { // Sửa lỗi chính tả từ 'regiser' thành 'register'
       console.log(action)
       state.isLoggedIn = action.payload.isLoggedIn;
       state.current = action.payload.userData;
@@ -31,5 +31,5 @@ export const userSlice = createSlice({
   // }
 });
 
-export const { register } = userSlice.actions; // Xuất ra action creator
+export const { login } = userSlice.actions; // Xuất ra action creator
 export default userSlice.reducer;

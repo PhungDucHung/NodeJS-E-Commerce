@@ -73,7 +73,10 @@ const [expireTime, setExpireTime] = useState(false)
             src={dealdaily?.thumb || 'https://niteair.co.uk/wp-content/uploads/2023/08/default-product-image.png'} alt='' className='w-full object-contain' 
         />                    
             <span className='line-clamp-1 text-center'>{dealdaily?.title}</span>
-            <span className='flex h-4'>{renderStarFromNumber(dealdaily?.totalRatings, 20)}</span>
+            <span className='flex h-4'>{renderStarFromNumber(dealdaily?.totalRatings, 20)?.map((el, index)=>(
+                <span key={index}>{el}</span>
+            )
+        )}</span>
             <span>{`${formatMoney(dealdaily?.price)} VNĐ`}</span>
         </div>
         <div className='px-4 mt-4 '>

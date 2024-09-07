@@ -24,3 +24,42 @@ export function secondsToHms(d){
         const s = Math.floor(d % 3600 % 60);
         return ({ h, m, s})
 }
+
+export const validate = (payload, setInvalidFields) => {
+    let invalids = 0;
+    const formatPayload = Object.entries(payload);
+
+    // Xóa các lỗi trước đó
+    setInvalidFields([]);
+
+    for (let [key, value] of formatPayload) {
+        if (value.trim() === '') {
+            invalids++;
+            setInvalidFields(prev => [...prev, { name: key, mes: 'Không được để trống' }]);
+        }
+    }
+
+    for (let [key, value] of formatPayload) {
+        switch (key) {
+            case 'email':
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    invalids++;
+                    setInvalidFields(prev => [...prev, { name: key, mes: 'Email không hợp lệ' }]);
+                }
+                break;
+
+            case 'password':
+                if (value.length < 6) {
+                    invalids++;
+                    setInvalidFields(prev => [...prev, { name: key, mes: 'Mật khẩu tối thiểu 6 ký tự' }]);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return invalids === 0; // Trả về true nếu không có trường nào không hợp lệ
+};

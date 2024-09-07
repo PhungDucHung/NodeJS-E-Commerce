@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as actions from './asyncActions';
+import userSlice from "../user/userSlice";
 
 export const appSlice = createSlice({
   name: 'app',
@@ -28,5 +29,4 @@ export const appSlice = createSlice({
     });
   }
 });
-
 export default appSlice.reducer;
