@@ -29,37 +29,34 @@ export const validate = (payload, setInvalidFields) => {
     let invalids = 0;
     const formatPayload = Object.entries(payload);
 
-    // Xóa các lỗi trước đó
-    setInvalidFields([]);
-
-    for (let [key, value] of formatPayload) {
-        if (value.trim() === '') {
+    for (let arr of formatPayload) {
+        if (arr[1].trim() === '') {
             invalids++;
-            setInvalidFields(prev => [...prev, { name: key, mes: 'Không được để trống' }]);
+            setInvalidFields(prev => [...prev, { name: arr[0], mes: 'Không được để trống' }]);
         }
     }
 
-    for (let [key, value] of formatPayload) {
-        switch (key) {
-            case 'email':
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(value)) {
-                    invalids++;
-                    setInvalidFields(prev => [...prev, { name: key, mes: 'Email không hợp lệ' }]);
-                }
-                break;
+    // for (let arr of formatPayload) {
+    //     switch (arr[0]) {
+    //         case 'email':
+    //             const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //             if (!arr[1].match(regex)) {
+    //                 invalids++
+    //                 setInvalidFields(prev => [...prev, { name: arr[0], mes: 'Email không hợp lệ' }]);
+    //             }
+    //             break;
 
-            case 'password':
-                if (value.length < 6) {
-                    invalids++;
-                    setInvalidFields(prev => [...prev, { name: key, mes: 'Mật khẩu tối thiểu 6 ký tự' }]);
-                }
-                break;
+    //         case 'password':
+    //             if (arr[1].length < 6) {
+    //                 invalids++;
+    //                 setInvalidFields(prev => [...prev, { name: arr[0], mes: 'Mật khẩu tối thiểu 6 ký tự' }]);
+    //             }
+    //             break;
 
-            default:
-                break;
-        }
-    }
+    //         default:
+    //             break;
+    //     }
+    // }
 
-    return invalids === 0; // Trả về true nếu không có trường nào không hợp lệ
+    return invalids 
 };

@@ -4,7 +4,8 @@ const { generateAccessToken , generateRefreshToken} = require('../middlewares/jw
 const jwt = require('jsonwebtoken')
 const sendMail = require('../ultils/sendMail')
 const crypto = require('crypto');
-const makeToken = require('uniqid')
+const makeToken = require('uniqid');
+const { response } = require('express');
 
 // const register = asyncHandler(async (req, res) => {
 //     const { email, password, firstname, lastname } = req.body
@@ -28,47 +29,75 @@ const register = asyncHandler(async(req, res) => {
     const { email, password, firstname, lastname, mobile } = req.body
     if (!email || !password || !lastname || !firstname || !mobile) 
         return res.status(400).json({
+        success: false,
         mes: 'Missing inputs'
     })
     const user = await User.findOne({ email })
         if (user) throw new Error('User has existed')
         else {
             const token = makeToken()
-            res.cookie('dataregister',{ ...req.body, token}, {httpOnly: true, maxAge: 15*60*1000 }  ) 
-            const html = `Xin vui lòng click vào link dưới đây để hoàn tất quá trình đăng ký .Link này sẽ hết hạn sau 15 phút kể từ bây giờ.
-             <a href=${process.env.URL_SERVER}/api/user/finalregister/${token}>Click here</a>`
-             await sendMail({email, html, subject: 'Hoàn tất đăng ký Digital World'})
+            const emailedited = btoa(email)+'@'+token
+            const newUser = await User.create({
+                email: emailedited ,password, firstname, lastname, mobile
+            })
+            if(newUser){
+                const html = `<h2>Register code:</h2><br/><blockquote>${token}</blockquote> `
+                await sendMail({email, html, subject: 'Confirm register account in Digital World'})
+            }
+            setTimeout(async() => {
+                await User.deleteOne({email: emailedited})
+            },[300000])
              return res.json({
-                success: true,
-                mes: 'Please check your email to activate your account'
+                success: newUser ? true : false,
+                mes: newUser ? 'Please check your email to activate your account' : 'Something went wrong, please try later'
             });
             
         }
 
 })
 
-const finalRegister = asyncHandler(async(req, res) => {
-    const cookie = req.cookies
-    const { token } = req.params
-    if (!cookie || cookie?.dataregister?.token !== token ){
-        res.clearCookie('finalregister')
-        return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`)
-    }
-    const newUser = await User.create({
-        email:cookie?.dataregister?.email,
-        password:cookie?.dataregister?.password,
-        mobile:cookie?.dataregister?.mobile,
-        firstname:cookie?.dataregister?.firstname,
-        lastname:cookie?.dataregister?.lastname,
+const finalRegister = asyncHandler(async (req, res) => {
+    // Lấy token từ tham số URL
+    const { token } = req.params;
+    console.log('Received token:', token); // Log token nhận được
 
-    })
-    res.clearCookie('finalregister')
-    if(newUser) return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`)
-    else return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`)
-})
+    // Tìm email trong cơ sở dữ liệu với token
+    const notActivedEmail = await User.findOne({
+        email: new RegExp(`${token}$`)
+    });
+
+    // Ghi log kết quả tìm kiếm
+    console.log('Email found in database:', notActivedEmail);
+
+    if (notActivedEmail) {
+        // Giải mã email từ cơ sở dữ liệu
+        const decodedEmail = atob(notActivedEmail.email.split('@')[0]);
+        console.log('Decoded email:', decodedEmail);
+
+        // Cập nhật email
+        notActivedEmail.email = decodedEmail;
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        await notActivedEmail.save();
+        console.log('Updated user:', notActivedEmail);
+    } else {
+        console.log('No email found for the given token');
+    }
+
+    // Tạo phản hồi JSON
+    const response = {
+        success: notActivedEmail ? true : false,
+        mes: notActivedEmail ? 'Register is Successfully. please go login' : 'Something went wrong, please try again'
+    };
+
+
+    return res.json(response);
+});
 
 // Refresh token => Cấp mới access token
-// Access token => Xác thực người dùng, quân quyên người dùng
+// Access token => Xác thực người dùng, phân quyên người dùng
+
+
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body
     if (!email || !password)
