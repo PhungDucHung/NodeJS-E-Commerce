@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as actions from './asyncActions';
-import userSlice from "../user/userSlice";
 
 export const appSlice = createSlice({
   name: 'app',

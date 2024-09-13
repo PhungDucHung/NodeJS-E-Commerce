@@ -51,9 +51,7 @@ const register = asyncHandler(async(req, res) => {
                 success: newUser ? true : false,
                 mes: newUser ? 'Please check your email to activate your account' : 'Something went wrong, please try later'
             });
-            
         }
-
 })
 
 const finalRegister = asyncHandler(async (req, res) => {

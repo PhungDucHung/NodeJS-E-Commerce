@@ -9,6 +9,8 @@ import { FaEye } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import { FaHeart } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+import { MdLogout } from "react-icons/md";
+
 
 const icons = {
     MdLocalPhone,
@@ -21,7 +23,8 @@ const icons = {
     FaEye,
     MdOutlineMenu,
     FaHeart,
-    IoIosArrowForward
+    IoIosArrowForward,
+    MdLogout
 }
 
 export default icons;
