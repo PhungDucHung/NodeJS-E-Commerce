@@ -1,10 +1,11 @@
 import React,{useCallback, useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
-import { apiGetProduct } from '../../apis'
-import { Breadcrumb,Button,SelectQuantity } from '../../components'
+import { apiGetProduct, apiGetProducts } from '../../apis'
+import { Breadcrumb,Button,ProductExtraInfoItem ,SelectQuantity, ProductInformation, CustomSlider } from '../../components'
 import Slider from 'react-slick'
 import ReactImageMagnify from 'react-image-magnify';
 import { formatMoney,formatPrice, renderStarFromNumber } from '../../ultils/helpers'
+import {productExtraInformation} from '../../ultils/contants'
 
 var settings = {
   dots: false,
@@ -18,13 +19,22 @@ const DetailProduct = () => {
   const {pid, title, category } = useParams()
   const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState(1)
+  const [relatedProducts, setRelatedProducts] = useState(null)
   const fetchProductData = async() => {
     const response = await apiGetProduct(pid)
     if(response.success) setProduct(response.productData)
   }
 
+  const fetchProducts = async() => {
+    const response = await apiGetProducts({category})
+    if(response.success) setRelatedProducts(response.products)
+  }
+
   useEffect(() => {
-    if(pid) fetchProductData()
+    if(pid) {
+      fetchProductData()
+      fetchProducts()
+    }
   },[pid])
 
   const handleQuantity = useCallback((number) => {
@@ -75,7 +85,7 @@ const DetailProduct = () => {
                   </Slider>
               </div>
           </div>
-          <div className=' border border-blue-300 w-2/5 flex flex-col gap-4'>
+          <div className='  w-2/5 flex flex-col gap-4'>
               <div className='flex items-center justify-between'>
                   <h2 className='text-[30px] font-semibold'>{`${formatMoney(formatPrice(product?.price))}`} VNĐ</h2>
                   <span className='text-sm text-main'>{`${product?.quantity} products remaining`}</span>
@@ -88,21 +98,38 @@ const DetailProduct = () => {
                   {product?.description?.map(el => (<li className='leading-6' key={el}>{el}</li>))}
               </ul>
               <div className='flex flex-col gap-8'>
-                  <SelectQuantity 
-                      quantity={quantity} 
-                      handleQuantity={handleQuantity} 
-                      handleChangeQuantity={handleChangeQuantity}
-                  />
+                 <div className='flex items-center gap-4'>
+                      <span className='font-semibold'>Quality</span>
+                        <SelectQuantity 
+                            quantity={quantity} 
+                            handleQuantity={handleQuantity} 
+                            handleChangeQuantity={handleChangeQuantity}
+                        />
+                 </div>
                   <Button fw>
                      Add to Cart
                   </Button>
               </div>
           </div>
-          <div className=' border border-blue-300 w-1/5'>
-              info
-          </div>
+          <div className=' w-1/5'>
+              {productExtraInformation.map(el => (
+                  <ProductExtraInfoItem  
+                    key={el.id}
+                    title={el.title}
+                    icon={el.icon}
+                    sub={el.sub}
+                  />
+              ))}
+          </div> 
       </div>
-      <div className='h-[500px] w-full'></div>
+      <div className='w-main m-auto mt-8'>
+        <ProductInformation/>
+      </div>
+      <div  className='w-main m-auto mt-8'>
+        <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>OTHER CUSTOMER ALSO LIKED</h3>
+              <CustomSlider normal={true} products={relatedProducts}/>
+      </div>
+      <div className='h-[100px] w-full'></div>
     </div>
   )
 }

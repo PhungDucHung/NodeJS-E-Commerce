@@ -10,7 +10,7 @@ import path from '../ultils/path'
 
 const {FaEye ,MdOutlineMenu, FaHeart} = icons
 
-const Product = ({productData, isNew }) => {
+const Product = ({productData, isNew, normal }) => {
   const [isShowOption, setIsShowOption] = useState(false)
 
 
@@ -36,11 +36,13 @@ const Product = ({productData, isNew }) => {
                 <img 
                     src={productData?.thumb || 'https://niteair.co.uk/wp-content/uploads/2023/08/default-product-image.png'} alt='' className='w-[274px] h-[274px] object-cover' 
                 />
-              <img 
+
+                {!normal && <img 
                   src={isNew ? label : labelGreen} 
                   alt='' 
                   className={`absolute w-[100px] h-[25px] top-[-10px] left-[160px] object-cover`}
-                />
+                />}
+                
                 </div>
                 <div className='flex flex-col mt-[15px] items-start gap-1 w-full'>
                     <span className='flex h-4'>{renderStarFromNumber(productData?.totalRatings)?.map((el, index)=>(

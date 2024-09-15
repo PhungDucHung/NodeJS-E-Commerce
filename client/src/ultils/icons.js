@@ -10,7 +10,10 @@ import { MdOutlineMenu } from "react-icons/md";
 import { FaHeart } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
-
+import { FaShieldAlt, FaTruck } from "react-icons/fa";
+import { FiGift } from "react-icons/fi";
+import { FaReplyAll } from "react-icons/fa";
+import { FaTty } from "react-icons/fa";
 
 const icons = {
     MdLocalPhone,
@@ -24,7 +27,12 @@ const icons = {
     MdOutlineMenu,
     FaHeart,
     IoIosArrowForward,
-    MdLogout
+    MdLogout,
+    FaShieldAlt,
+    FaTruck,
+    FiGift,
+    FaReplyAll,
+    FaTty
 }
 
 export default icons;
