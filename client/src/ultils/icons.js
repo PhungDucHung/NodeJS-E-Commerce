@@ -14,6 +14,8 @@ import { FaShieldAlt, FaTruck } from "react-icons/fa";
 import { FiGift } from "react-icons/fi";
 import { FaReplyAll } from "react-icons/fa";
 import { FaTty } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+
 
 const icons = {
     MdLocalPhone,
@@ -32,7 +34,8 @@ const icons = {
     FaTruck,
     FiGift,
     FaReplyAll,
-    FaTty
+    FaTty,
+    FaChevronDown
 }
 
 export default icons;
