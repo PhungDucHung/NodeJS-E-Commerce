@@ -12,13 +12,15 @@ export { default as ProductCard} from './ProductCard';
 export { default as CustomSlider} from './CustomSlider';
 export { default as TopHeader} from './TopHeader';
 export { default as Footer} from './Footer';
-export { default as InputField} from './InputField';
+export { default as InputField} from './inputField';
 export { default as Button} from './Button';
 export { default as Breadcrumb} from './Breadcrumb';
 export { default as SelectQuantity} from './SelectQuantity';
 export { default as ProductExtraInfoItem} from './productExtraInfoItem';
 export { default as ProductInformation} from './ProductInformation';
 export { default as SearchItem} from './SearchItem';
+export { default as InputSelect} from './inputSelect';
+
 
 
 

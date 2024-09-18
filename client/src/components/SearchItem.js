@@ -45,9 +45,9 @@ const SearchItem = ({ name, activeClick ,changeActiveFilter, type = 'checkbox' }
         if(type === 'input') fetchBestPriceProduct()
     },[type])
 
-    useEffect(() => {
-        if(price.from > price.to) alert('From price cannot greater than to price')
-    }, [price]) 
+    // useEffect(() => {
+    //     if(price.from > price.to) alert('From price cannot greater than to price')
+    // }, [price]) 
 
     const deboucePriceFrom = useDebounce(price.from, 500)
     const deboucePriceTo = useDebounce(price.to, 500)
