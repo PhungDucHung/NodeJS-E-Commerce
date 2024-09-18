@@ -34,15 +34,19 @@ const getProducts = asyncHandler(async (req, res) => {
     let queryString = JSON.stringify(queries);
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, matchedEl => `$${matchedEl}`);
     const formattedQueries = JSON.parse(queryString);
+    let colorQueryObject = {};
 
     // Filtering
-    if (queries?.title) {
-        formattedQueries.title = { $regex: queries.title, $options: 'i' }; 
+    if (queries?.title) formattedQueries.title = { $regex: queries.title, $options: 'i' }; 
+    if (queries?.category) formattedQueries.category = { $regex: queries.category, $options: 'i' }; 
+    if (queries?.color) {
+        delete formattedQueries.color;
+        const colorArr = queries.color?.split(',')
+        const colorQuery = colorArr.map(el => ({color: { $regex: el, $options: 'i'} }))
+        colorQueryObject = {$or: colorQuery}
     }
-    if (queries?.category) {
-        formattedQueries.category = { $regex: queries.category, $options: 'i' }; 
-    }
-    let queryCommand = Product.find(formattedQueries);
+    const q = {...colorQueryObject, ...formattedQueries}
+    let queryCommand = Product.find(q);
 
     // Xử lý sắp xếp ( sorting )
     if (req.query.sort) {
@@ -66,7 +70,7 @@ const getProducts = asyncHandler(async (req, res) => {
       try {
           // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
           const products = await queryCommand.exec();
-          const count = await Product.countDocuments(formattedQueries);
+          const count = await Product.find(q).countDocuments();
   
           return res.status(200).json({
               success: products.length > 0,

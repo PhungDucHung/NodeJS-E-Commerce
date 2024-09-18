@@ -16,6 +16,8 @@ const breakpointColumnsObj = {
 const Products = () => {
   const [products, setProducts] = useState(null)
   const [activeClick, setActiveClick] = useState(null)
+  const [params] = useSearchParams()
+  console.log(params.entries())
 
   const fetchProductsByCategory = async(queries) => {
     const response = await apiGetProducts(queries)
@@ -25,8 +27,27 @@ const Products = () => {
   const { category } = useParams()
 
   useEffect(() => {
-    fetchProductsByCategory()
-  },[])
+    let param = []
+    for(let i of params.entries()) param.push(i)
+    const queries = {}
+    let priceQuery = {}
+    for (let i of params) queries[i[0]] = i[1]
+    if(queries.to && queries.from ){
+        priceQuery = { $and: [
+          {price:{gte: queries.from }},
+          {price:{lte: queries.to }}
+        ] 
+      }
+      delete queries.price
+    }
+
+    if(queries.from) queries.price = {gte: queries.from}
+    if(queries.to) queries.price = {lte: queries.to}
+    delete queries.to
+    delete queries.from
+    const q = {...priceQuery, ...queries}
+    fetchProductsByCategory({...priceQuery, ...queries})
+  },[params])
 
   const changeActiveFilter = useCallback((name) =>{
       if(activeClick === name) setActiveClick(null)
@@ -50,6 +71,7 @@ const Products = () => {
                           name='price'
                           activeClick={activeClick}
                           changeActiveFilter={changeActiveFilter}
+                          type='input'
                         />
                         <SearchItem
                           name='color'
@@ -69,7 +91,7 @@ const Products = () => {
                   columnClassName="my-masonry-grid_column">
                   {products?.map(el => (
                       <Product
-                        key={el.id}
+                        key={el._id}
                         pid={el.id}
                         productData={el}
                         normal = {true}
