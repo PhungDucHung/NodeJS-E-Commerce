@@ -1,0 +1,27 @@
+[33m9b61544[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mClient2[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33mf0122b0[m HEAD@{1}: commit: Finish Filter By (Product)
+[33m9b61544[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mClient2[m[33m)[m HEAD@{2}: commit (amend): Page Product & Design Filter
+[33m0be6323[m[33m ([m[1;31morigin/Client2[m[33m)[m HEAD@{3}: commit: Design 'Filter by'
+[33m68fcb80[m HEAD@{4}: commit: Finish Detail Product
+[33m77e0b74[m HEAD@{5}: commit: magnify image & detail product
+[33mec87d25[m HEAD@{6}: commit: Breadcrumbs
+[33m5ef9df6[m HEAD@{7}: commit: show user login & logout
+[33mfa2cacf[m HEAD@{8}: commit: Verify register by gmail
+[33m6023171[m HEAD@{9}: commit: Validation Form
+[33m8bc555c[m HEAD@{10}: commit: updated email (Forgot password)
+[33med542f9[m HEAD@{11}: commit: Register through email and cookie
+[33m3ac341b[m HEAD@{12}: commit: Login with Redux Toolkit
+[33ma39e222[m HEAD@{13}: commit: Design Login
+[33m622d0af[m HEAD@{14}: commit: Create Pages & Footer
+[33m446f7f1[m HEAD@{15}: commit: New Arrivals & Hot Collections
+[33m14fd0e4[m HEAD@{16}: commit: Featured Products (Home)
+[33m828204d[m HEAD@{17}: commit: Deal Daily
+[33m815f8ad[m HEAD@{18}: commit: Options when hover product
+[33m3737451[m HEAD@{19}: commit: Design card product bestseller
+[33mf920faa[m HEAD@{20}: commit: custom react slick & Design and call api product (Best Sellers)
+[33m27a15f3[m HEAD@{21}: commit: Convert call apis to redux toolkit
+[33maae0183[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{22}: checkout: moving from master to Client2
+[33maae0183[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{23}: checkout: moving from Client to master
+[33maae0183[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{24}: reset: moving to HEAD
+[33maae0183[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{25}: checkout: moving from master to Client
+[33maae0183[m[33m ([m[1;32mmaster[m[33m)[m HEAD@{26}: commit (initial): Call api Product category & Design Side bar
