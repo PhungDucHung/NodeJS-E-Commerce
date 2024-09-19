@@ -1,15 +1,18 @@
-import React,{ memo, useState } from 'react'
+import React,{ memo, useState , useCallback} from 'react'
 import {productInfoTabs} from '../ultils/contants'
-import { Votebar } from './'
+import { Button, Votebar, VoteOption } from './'
 import { renderStarFromNumber } from '../ultils/helpers'
+import { apiRatings } from '../apis'
+import { useDispatch } from 'react-redux'
+import {showModal} from '../store/app/appSlice'
 
-
-const ProductInformation = ({totalRatings, totalCount}) => {
-
+const ProductInformation = ({totalRatings, totalCount, nameProduct}) => {
     const [activedTab, setActivedTab] = useState(1);
+    const dispatch = useDispatch();
 
   return (
     <div>
+
       <div className='flex items-center gap-2 relative bottom-[-1px]'>
           {
               productInfoTabs.map(el => (
@@ -30,8 +33,9 @@ const ProductInformation = ({totalRatings, totalCount}) => {
       </div>
       <div className='w-full  border p-4'>
             {productInfoTabs.some(el => el.id === activedTab) && productInfoTabs.find(el => el.id === activedTab)?.content }
-            {activedTab === 5 && <div className='flex p-4'>
-                <div className='flex-4 border flex flex-col items-center justify-center border-red-500'>
+            {activedTab === 5 && <div className='flex flex-col p-4'>
+               <div className='flex'>
+               <div className='flex-4 border flex flex-col items-center justify-center border-red-500'>
                     <span className='font-semibold text-3xl'>{`${totalRatings}/5`}</span>
                     <span className='flex items-center gap-1'>{renderStarFromNumber(totalRatings)?.map((el,index)=>(
                       <span key={index}>{el}</span>
@@ -50,7 +54,12 @@ const ProductInformation = ({totalRatings, totalCount}) => {
                      />
                   ))}
                 </div>
-            </div>}
+               </div>
+                <div className='flex-col flex items-center p-4 text-m'>
+                  <span>Comment and review now</span>
+                  <Button handleOnclick={() => dispatch(showModal({ isShowModal: true, modalChildren: <VoteOption nameProduct={nameProduct}/> }))}>Vote now !</Button>
+            </div>
+            </div>} 
       </div>
     </div>
   )

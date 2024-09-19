@@ -23,7 +23,7 @@ const fn = async (product) => {
         images: product?.images,
         color: color,
         thumb: product?.thumb,
-        totalRatings: Math.round(Math.random() *5)
+        totalRatings: 0
     });
 }
 

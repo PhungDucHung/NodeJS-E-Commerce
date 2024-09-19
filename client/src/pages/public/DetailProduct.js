@@ -42,6 +42,7 @@ const DetailProduct = () => {
       fetchProductData();
       fetchProducts();
     }
+    window.scrollTo(0, 0);
   }, [pid]);
 
   const handleQuantity = useCallback((number) => {
@@ -68,7 +69,7 @@ const DetailProduct = () => {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full '>
       <div className='h-[81px] flex justify-center items-center bg-gray-100'>
         <div className='w-main'>
           <h3 className='font-bold'>{title}</h3>
@@ -143,7 +144,11 @@ const DetailProduct = () => {
         </div> 
       </div>
       <div className='w-main m-auto mt-8'>
-        <ProductInformation totalRatings={product.totalRatings || 0} totalCount={18} />
+        <ProductInformation 
+          totalRatings={product.totalRatings || 0} 
+          totalCount={18} 
+          nameProduct={product?.title}
+        />
       </div>
       <div className='w-main m-auto mt-8'>
         <h3 className='text-[20px] font-semibold py-[15px] border-b-2 border-main'>OTHER CUSTOMERS ALSO LIKED</h3>
