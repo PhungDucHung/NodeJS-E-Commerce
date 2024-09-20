@@ -3,25 +3,61 @@ import {productInfoTabs} from '../ultils/contants'
 import { Button, Votebar, VoteOption } from './'
 import { renderStarFromNumber } from '../ultils/helpers'
 import { apiRatings } from '../apis'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {showModal} from '../store/app/appSlice'
+import Swal from 'sweetalert2'
+import path from '../ultils/path'
+import { useNavigate } from 'react-router-dom'
 
-const ProductInformation = ({totalRatings, totalCount, nameProduct}) => {
+
+const ProductInformation = ({totalRatings, ratings, nameProduct, pid, rerender }) => {
     const [activedTab, setActivedTab] = useState(1);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isLoggedIn } = useSelector(state => state.user)
 
+
+    const handleSubmitVoteOption = async({comment, score}) => {
+        if (!comment || !pid || !score ){
+          alert('Please vote when click submit');
+          return
+        }
+         await apiRatings({star: score, comment , pid ,rerender})
+         dispatch(showModal({ isShowModal: false, modalChildren: null }))
+         rerender()
+    }
+
+    const handleVoteNow = () => {
+      if (!isLoggedIn) {
+        Swal.find({
+          text: 'Login to vote',
+          cancelButtonText: 'Cancel',
+          confirmButtonText: 'Go login',
+          title: 'Oops!',
+          showCancelButton: true,
+        }).then((rs) => {
+          if(rs.isConfirmed) navigate(`/${path.LOGIN}`)
+        })
+      }else{
+        dispatch(showModal({
+          isShowModal: true, modalChildren: <VoteOption 
+            nameProduct={nameProduct}
+            handleSubmitVoteOption={handleSubmitVoteOption}
+            />
+        }))
+      }
+    }
   return (
     <div>
-
       <div className='flex items-center gap-2 relative bottom-[-1px]'>
           {
               productInfoTabs.map(el => (
                   <span 
-                          className={`py-2 cursor-pointer px-4 ${activedTab === +el.id ? 'bg-white border border-b-0' : 'bg-gray-200' }` } 
-                          key={el.id}
-                          onClick={() => setActivedTab(el.id)}
-                      >
-                          {el.name}
+                      className={`py-2 cursor-pointer px-4 ${activedTab === +el.id ? 'bg-white border border-b-0' : 'bg-gray-200' }` } 
+                      key={el.id}
+                      onClick={() => setActivedTab(el.id)}
+                  >
+                      {el.name}
                   </span>
               ))}
                   <div                        
@@ -41,7 +77,7 @@ const ProductInformation = ({totalRatings, totalCount, nameProduct}) => {
                       <span key={index}>{el}</span>
                     ))}</span>
                     <span className='text-sm'>
-                        {`${totalCount} reviewers and comments`}
+                        {`${ratings?.length} reviewers and comments`}
                     </span>
                 </div>
                 <div className='flex-6 border p-2 flex gap-4 flex-col'>
@@ -49,15 +85,17 @@ const ProductInformation = ({totalRatings, totalCount, nameProduct}) => {
                      <Votebar
                         key={el}
                         number={el+1}
-                        ratingTotal={5}
-                        ratingCount={2}
+                        ratingTotal={ratings?.length}
+                        ratingCount={ratings?.filter(i => i.star === el+1)?.length}
                      />
                   ))}
                 </div>
                </div>
                 <div className='flex-col flex items-center p-4 text-m'>
                   <span>Comment and review now</span>
-                  <Button handleOnclick={() => dispatch(showModal({ isShowModal: true, modalChildren: <VoteOption nameProduct={nameProduct}/> }))}>Vote now !</Button>
+                  <Button handleOnclick={handleVoteNow}
+                    >
+                      Vote now !</Button>
             </div>
             </div>} 
       </div>

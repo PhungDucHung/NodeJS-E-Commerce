@@ -170,23 +170,23 @@ export const sorts = [
 
 export const VoteOptions = [
     {
-        id: 5,
-        text: 'Perfect',
-    },
-    {
-        id: 4,
-        text: 'Good',
-    },
-    {
-        id: 3,
-        text: 'Neutral',
+        id: 1,
+        text: 'Terrible',
     },
     {
         id: 2,
         text: 'Bad',
     },
     {
-        id: 1,
-        text: 'Terrible',
+        id: 3,
+        text: 'Neutral',
+    },
+    {
+        id: 4,
+        text: 'Good',
+    },
+    {
+        id: 5,
+        text: 'Perfect',
     },
 ]
