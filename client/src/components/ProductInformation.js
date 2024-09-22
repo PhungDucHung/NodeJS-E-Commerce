@@ -1,6 +1,6 @@
 import React,{ memo, useState , useCallback} from 'react'
 import {productInfoTabs} from '../ultils/contants'
-import { Button, Votebar, VoteOption } from './'
+import { Button, Votebar, VoteOption, Comment } from './'
 import { renderStarFromNumber } from '../ultils/helpers'
 import { apiRatings } from '../apis'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,37 +16,40 @@ const ProductInformation = ({totalRatings, ratings, nameProduct, pid, rerender }
     const navigate = useNavigate();
     const { isLoggedIn } = useSelector(state => state.user)
 
-
     const handleSubmitVoteOption = async({comment, score}) => {
         if (!comment || !pid || !score ){
           alert('Please vote when click submit');
           return
         }
-         await apiRatings({star: score, comment , pid ,rerender})
+         await apiRatings({star: score, comment , pid , updatedAt: Date.now()})
          dispatch(showModal({ isShowModal: false, modalChildren: null }))
          rerender()
     }
 
     const handleVoteNow = () => {
       if (!isLoggedIn) {
-        Swal.find({
+        Swal.fire({
           text: 'Login to vote',
           cancelButtonText: 'Cancel',
           confirmButtonText: 'Go login',
           title: 'Oops!',
           showCancelButton: true,
-        }).then((rs) => {
-          if(rs.isConfirmed) navigate(`/${path.LOGIN}`)
-        })
-      }else{
+        }).then((result) => {
+          if (result.isConfirmed) navigate(`/${path.LOGIN}`);
+        });
+      } else {
         dispatch(showModal({
-          isShowModal: true, modalChildren: <VoteOption 
-            nameProduct={nameProduct}
-            handleSubmitVoteOption={handleSubmitVoteOption}
+          isShowModal: true,
+          modalChildren: (
+            <VoteOption 
+              nameProduct={nameProduct}
+              handleSubmitVoteOption={handleSubmitVoteOption}
             />
-        }))
+          ),
+        }));
       }
     }
+    
   return (
     <div>
       <div className='flex items-center gap-2 relative bottom-[-1px]'>
@@ -60,16 +63,16 @@ const ProductInformation = ({totalRatings, ratings, nameProduct, pid, rerender }
                       {el.name}
                   </span>
               ))}
-                  <div                        
-                      className={`py-2 cursor-pointer px-4 ${activedTab === 5 ? 'bg-white border border-b-0' : 'bg-gray-200' }` } 
-                      onClick={() => setActivedTab(5)}
-                  >
-                    CUSTOMER REVIEW
-            </div>
+      
       </div>
       <div className='w-full  border p-4'>
             {productInfoTabs.some(el => el.id === activedTab) && productInfoTabs.find(el => el.id === activedTab)?.content }
-            {activedTab === 5 && <div className='flex flex-col p-4'>
+      </div>
+
+      <div className='flex flex-col py-8 w-main'>
+      <span className={`py-2 cursor-pointer px-4 bg-white border border-b-0` } >
+            CUSTOMER REVIEW
+      </span>
                <div className='flex'>
                <div className='flex-4 border flex flex-col items-center justify-center border-red-500'>
                     <span className='font-semibold text-3xl'>{`${totalRatings}/5`}</span>
@@ -95,11 +98,22 @@ const ProductInformation = ({totalRatings, ratings, nameProduct, pid, rerender }
                   <span>Comment and review now</span>
                   <Button handleOnclick={handleVoteNow}
                     >
-                      Vote now !</Button>
+                      Vote now !
+                  </Button>
             </div>
-            </div>} 
+            <div className='flex flex-col gap-4'>
+                { ratings?.map(el => (
+                  <Comment
+                    key={el._id}
+                    star={el.star}
+                    updatedAt={el.updatedAt} 
+                    comment={el.comment}
+                    name={`${el.postedBy?.lastname} ${el.postedBy?.firstname}`}
+                  />
+                ))}
+            </div>
+            </div>
       </div>
-    </div>
   )
 }
 

@@ -17,6 +17,9 @@ var userSchema = new mongoose.Schema({
         required: true, // Trường này là bắt buộc phải có giá trị
         unique: true, // Đảm bảo giá trị là duy nhất trong cơ sở dữ liệu
     },
+    avatar: {
+        type: String,
+    },
     mobile: {
         type: String,
         required: true, // Trường này là bắt buộc phải có giá trị

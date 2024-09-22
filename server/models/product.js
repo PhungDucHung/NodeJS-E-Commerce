@@ -55,7 +55,10 @@ var productSchema = new mongoose.Schema({
         {
             star: { type: Number },
             postedBy: { type: mongoose.Types.ObjectId, ref: 'User' },
-            comment: { type: String }
+            comment: { type: String },
+            updatedAt: {
+                type: Date
+            }
         }
     ],
     // số điểm đánh giá sản phẩm

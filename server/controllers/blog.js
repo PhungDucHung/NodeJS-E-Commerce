@@ -98,7 +98,7 @@ const getBlog = asyncHandler(async(req, res) =>{
     const {bid} = req.params
     const blog = await Blog.findByIdAndUpdate(bid, { $inc: {numberViews: 1}}, {new:true})
     .populate('likes','firstname lastname')
-    .populate('dislikes', 'firstname lastname') // kết nối với bảng khác
+    .populate('dislikes', 'firstname lastname') 
     return res.json({
         success: blog ? true: false,
         rs: blog
