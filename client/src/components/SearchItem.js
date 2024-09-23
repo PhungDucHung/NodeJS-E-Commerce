@@ -36,6 +36,7 @@ const SearchItem = ({ name, activeClick ,changeActiveFilter, type = 'checkbox' }
             const queries = {}
             for (let i of param) queries[i[0]] = i[1]
             queries.color = selected.join(',')
+            queries.page = 1
             navigate({
             pathname: `/${category}`,
             search: createSearchParams(queries).toString(),
@@ -63,9 +64,7 @@ const SearchItem = ({ name, activeClick ,changeActiveFilter, type = 'checkbox' }
             const queries = {}
             for(let i of param) queries[i[0]] = i[1]
             queries.page = 1
-            const data = {}
-            if(Number(price.from) > 0) queries.from = price.from
-            if(Number(price.to) > 0) queries.to = price.to
+
             navigate({
                 pathname:  `/${category}`,
                 search: createSearchParams(queries).toString(),

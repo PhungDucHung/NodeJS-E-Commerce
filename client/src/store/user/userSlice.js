@@ -8,7 +8,8 @@ export const userSlice = createSlice({
     isLoggedIn: false,
     current: null,
     token: null,
-    isLoading: false
+    isLoading: false,
+    mes:''
   },
   reducers: {
     login: (state, action) => { 
@@ -19,6 +20,9 @@ export const userSlice = createSlice({
       state.isLoggedIn = false
       state.token = null
     },
+    clearMessage: (state) => {
+      state.mes = ''
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(actions.getCurrent.pending, (state) => {
@@ -27,13 +31,17 @@ export const userSlice = createSlice({
     builder.addCase(actions.getCurrent.fulfilled, (state, action) => {
       state.isLoading = false;
       state.current = action.payload;
+      state.isLoggedIn = true;
     });
     builder.addCase(actions.getCurrent.rejected, (state, action) => {
       state.isLoading = false;
       state.current = null ;
+      state.isLoggedIn = false;
+      state.token = null ;
+      state.mes = 'Phiên đăng nhập đã hết hạn ,hãy đăng nhập lại'
     });
   }
 });
 
-export const { login, logout } = userSlice.actions; // Xuất ra action creator
+export const { login, logout, clearMessage } = userSlice.actions; // Xuất ra action creator
 export default userSlice.reducer;

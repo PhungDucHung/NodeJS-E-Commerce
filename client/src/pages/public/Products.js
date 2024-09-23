@@ -40,10 +40,12 @@ const Products = () => {
         ] 
       }
       delete queries.price
+    }else{
+      if(queries.from) queries.price = {gte: queries.from}
+      if(queries.to) queries.price = {lte: queries.to}
     }
 
-    if(queries.from) queries.price = {gte: queries.from}
-    if(queries.to) queries.price = {lte: queries.to}
+
     delete queries.to
     delete queries.from
     const q = {...priceQuery, ...queries}
