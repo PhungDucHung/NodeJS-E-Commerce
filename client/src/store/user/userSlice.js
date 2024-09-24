@@ -16,9 +16,15 @@ export const userSlice = createSlice({
       state.token = action.payload.token;
     },
     logout: (state, action) => { 
-      state.isLoggedIn = false
-      state.token = null
-    },
+      state.isLoggedIn= false
+      state.current= null
+      state.token= null
+      state.isLoading= false
+  },
+    
+    clearMessage: (state) => {
+      state.mes = ''
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(actions.getCurrent.pending, (state) => {
@@ -35,5 +41,5 @@ export const userSlice = createSlice({
   }
 });
 
-export const { login, logout } = userSlice.actions; // Xuất ra action creator
+export const { login, logout, clearMessage } = userSlice.actions; // Xuất ra action creator
 export default userSlice.reducer;
