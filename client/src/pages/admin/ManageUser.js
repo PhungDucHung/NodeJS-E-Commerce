@@ -2,32 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { apiGetUsers } from '../../apis/user';
 import { roles } from '../../ultils/contants';
 import moment from 'moment';
-import { InputField } from '../../components';
+import { InputField, Pagination } from '../../components';
 import useDebounce from '../../hook/useDebounce';
-
+import { useSearchParams } from 'react-router-dom';
 
 const ManageUser = () => {
-  const [users, setUsers] = useState(null);
-  const [queries, setQueries] = useState({
-    q: ""
-  });
+  const [users, setUsers] = useState([]);
+  const [counts, setCounts] = useState(0); // Tạo state cho counts
+  const [queries, setQueries] = useState({ q: "" });
+  const [params] = useSearchParams();
+
   const [invalidFields, setInvalidFields] = useState([]); 
 
   const fetchUsers = async (params) => { 
-    const response = await apiGetUsers(params);
-    if (response.success) setUsers(response.users);
+    const response = await apiGetUsers({...params, limit: process.env.REACT_APP_LIMIT});
+    if (response.success) {
+      setUsers(response.users);
+      setCounts(response.counts); // Cập nhật counts
+    }
   };
 
-  const queriesDebounce = useDebounce(queries.q, 800)
+  const queriesDebounce = useDebounce(queries.q, 800);
 
   useEffect(() => {
-    const params = {}
-    if(queriesDebounce) params.q = queriesDebounce
-    fetchUsers(params);
-  }, [queriesDebounce]);
+    const queries = Object.fromEntries([...params]) ;
+    if (queriesDebounce) queries.q = queriesDebounce;
+    fetchUsers(queries);
+  }, [queriesDebounce ,params ]);
 
-  console.log(queries.q);
-  
   return (
     <div className='w-full'>
       <h1 className='h-[75px] flex justify-between items-center text-3xl font-bold px-4 borde-b'>
@@ -59,8 +61,8 @@ const ManageUser = () => {
             </tr>
           </thead>
           <tbody>
-            {users?.map((el, idx) => (
-              <tr key={el.id} className='border border-gray-500'>
+            {users.map((el, idx) => (
+              <tr key={el._id} className='border border-gray-500'>
                 <td className='py-2 px-4'>{idx + 1}</td>
                 <td className='py-2 px-4'>{el.email}</td>
                 <td className='py-2 px-4'>{`${el.lastname} ${el.firstname}`}</td>
@@ -76,6 +78,10 @@ const ManageUser = () => {
             ))}
           </tbody>
         </table>
+        
+        <div className='w-full flex justify-end '>
+          <Pagination totalCount={counts} /> 
+        </div>
       </div>
     </div>
   );
