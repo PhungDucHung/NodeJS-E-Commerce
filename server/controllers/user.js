@@ -204,8 +204,18 @@ const getUsers = asyncHandler(async (req, res) => {
     const formattedQueries = JSON.parse(queryString);
 
     // Filtering
-    if (queries?.name) formattedQueries.name = { $regex: queries.name, $options: 'i' }; 
-    if (queries?.category) formattedQueries.category = { $regex: queries.category, $options: 'i' }; 
+    if (queries?.name) {
+        formattedQueries.name = { $regex: queries.name, $options: 'i' };
+    }
+    if (req.query.q) {
+        delete formattedQueries.q;
+        formattedQueries.$or = [
+            { firstname: { $regex: req.query.q, $options: 'i' } },
+            { lastname: { $regex: req.query.q, $options: 'i' } },
+            { email: { $regex: req.query.q, $options: 'i' } },
+        ];
+    }
+
     let queryCommand = User.find(formattedQueries);
 
     // Xử lý sắp xếp ( sorting )
@@ -220,28 +230,28 @@ const getUsers = asyncHandler(async (req, res) => {
         queryCommand = queryCommand.select(fields);
     }
 
-      // Xử lý phân trang
-      const page = +req.query.page || 1; // Chuyển đổi page thành số, mặc định là 1 nếu không được cung cấp
-      const limit = +req.query.limit || +process.env.LIMIT_PRODUCTS; // Chuyển đổi limit thành số, mặc định từ biến môi trường
-      const skip = (page - 1) * limit; // Tính số lượng tài liệu cần bỏ qua
-  
-      queryCommand = queryCommand.skip(skip).limit(limit); // Áp dụng phân trang cho truy vấn
-  
-      try {
-          // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
-          const users = await queryCommand.exec();
-          const count = await User.find(formattedQueries).countDocuments();
-  
-          return res.status(200).json({
-              success: users.length > 0,
-              counts: count,
-              users: users.length > 0 ? users : 'Không thể lấy sản phẩm'
-          });
-      } catch (err) {
-          // Xử lý lỗi và trả về mã trạng thái 500 với thông báo lỗi
-          return res.status(500).json({ success: false, message: err.message });
-      }
-})
+    // Xử lý phân trang
+    const page = +req.query.page || 1; // Chuyển đổi page thành số, mặc định là 1 nếu không được cung cấp
+    const limit = +req.query.limit || +process.env.LIMIT_PRODUCTS; // Chuyển đổi limit thành số, mặc định từ biến môi trường
+    const skip = (page - 1) * limit; // Tính số lượng tài liệu cần bỏ qua
+
+    queryCommand = queryCommand.skip(skip).limit(limit); // Áp dụng phân trang cho truy vấn
+
+    try {
+        // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
+        const users = await queryCommand.exec();
+        const count = await User.countDocuments(formattedQueries); // Sử dụng countDocuments để đếm số lượng tài liệu
+
+        return res.status(200).json({
+            success: users.length > 0,
+            counts: count,
+            users: users.length > 0 ? users : 'Không có người dùng nào'
+        });
+    } catch (err) {
+        // Xử lý lỗi và trả về mã trạng thái 500 với thông báo lỗi
+        return res.status(500).json({ success: false, message: err.message });
+    }
+});
 
 const deleteUser = asyncHandler(async (req, res) => {
     const { _id } = req.query
