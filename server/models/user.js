@@ -19,11 +19,10 @@ var userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
+
     },
     mobile: {
         type: String,
-        required: true, // Trường này là bắt buộc phải có giá trị
-        unique: true, // Đảm bảo giá trị là duy nhất trong cơ sở dữ liệu
     },
     password: {
         type: String,
@@ -44,7 +43,7 @@ var userSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId, 
         ref: 'Product' 
     }],
-    isBlocked: {        // khóa chức năng người dùng
+    isBlocked: {      
         type: Boolean,
         default: false, 
     },

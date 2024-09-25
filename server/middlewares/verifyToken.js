@@ -23,16 +23,26 @@ const verifyAccessToken = asyncHandler(async (req, res, next) => {
 })
 
 const isAdmin = asyncHandler((req, res, next) => {
-    // Lấy role của người dùng từ đối tượng req.user
-    const { role } = req.user;
-    // Kiểm tra xem role của người dùng có phải là 'admin' không
-    if (role !== 'admin') {
-        // Nếu không phải là admin, trả về phản hồi lỗi với mã trạng thái 401
+    // Kiểm tra xem req.user có tồn tại không
+    if (!req.user) {
         return res.status(401).json({
             success: false,
-            mes: 'REQUIRE ADMIN ROLE'
+            message: 'Unauthorized: User not logged in'
         });
     }
+
+    // Lấy role của người dùng từ đối tượng req.user
+    const { role } = req.user;
+
+    // Kiểm tra xem role của người dùng có phải là admin không (có thể dùng mã số hoặc chuỗi)
+    if (role !== '1945' && role !== 'admin') {
+        // Nếu không phải là admin, trả về phản hồi lỗi với mã trạng thái 403
+        return res.status(403).json({
+            success: false,
+            message: 'REQUIRE ADMIN ROLE'
+        });
+    }
+
     // Nếu người dùng là admin, tiếp tục xử lý tiếp theo trong chuỗi middleware
     next();
 });

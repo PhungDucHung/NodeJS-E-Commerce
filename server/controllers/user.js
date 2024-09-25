@@ -5,26 +5,8 @@ const jwt = require('jsonwebtoken')
 const sendMail = require('../ultils/sendMail')
 const crypto = require('crypto');
 const makeToken = require('uniqid');
-const { response } = require('express');
+const {users} = require('../ultils/constant')
 
-// const register = asyncHandler(async (req, res) => {
-//     const { email, password, firstname, lastname } = req.body
-//     if (!email || !password || !lastname || !firstname)
-//         return res.status(400).json({
-//             success: false,
-//             mes: 'Missing inputs'
-//         })
-
-//     const user = await User.findOne({ email })
-//     if (user) throw new Error('User has existed')
-//     else {
-//         const newUser = await User.create(req.body)
-//         return res.status(200).json({
-//             success: newUser ? true : false,
-//             mes: newUser ? 'Register is successfully. Please go login~' : 'Something went wrong'
-//         })
-//     }
-// })
 const register = asyncHandler(async(req, res) => {
     const { email, password, firstname, lastname, mobile } = req.body
     if (!email || !password || !lastname || !firstname || !mobile) 
@@ -224,7 +206,7 @@ const getUsers = asyncHandler(async (req, res) => {
     // Filtering
     if (queries?.name) formattedQueries.name = { $regex: queries.name, $options: 'i' }; 
     if (queries?.category) formattedQueries.category = { $regex: queries.category, $options: 'i' }; 
-    let queryCommand = Product.find(formattedQueries);
+    let queryCommand = User.find(formattedQueries);
 
     // Xử lý sắp xếp ( sorting )
     if (req.query.sort) {
@@ -247,13 +229,13 @@ const getUsers = asyncHandler(async (req, res) => {
   
       try {
           // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
-          const products = await queryCommand.exec();
-          const count = await Product.find(formattedQueries).countDocuments();
+          const users = await queryCommand.exec();
+          const count = await User.find(formattedQueries).countDocuments();
   
           return res.status(200).json({
-              success: products.length > 0,
+              success: users.length > 0,
               counts: count,
-              products: products.length > 0 ? products : 'Không thể lấy sản phẩm'
+              users: users.length > 0 ? users : 'Không thể lấy sản phẩm'
           });
       } catch (err) {
           // Xử lý lỗi và trả về mã trạng thái 500 với thông báo lỗi
@@ -361,7 +343,15 @@ const updateCart = asyncHandler(async(req, res)=> {
 }
 })
 
+ const createUsers = asyncHandler(async(req, res) => {
+    const response = await User.create(users)
+    return res.status(200).json({
+        success: response ? true : false,
+        users: response ? response : 'Something went wrong'
+    });
+ })
+
 module.exports = {
-    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword ,getUsers ,deleteUser ,updateUser,updateUserByAdmin , updateUserAddress, updateCart, finalRegister
+    register, login ,getCurrent ,refreshAccessToken , logout ,forgotPassword ,resetPassword ,getUsers ,deleteUser ,updateUser,updateUserByAdmin , updateUserAddress, updateCart, finalRegister ,createUsers
 };
  

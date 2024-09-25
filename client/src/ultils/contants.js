@@ -230,5 +230,15 @@ export const adminSidebar = [
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
         icon: <FaMoneyBills size={20}/>
     },
-    
 ] 
+
+export const roles = [
+    {
+        code: 1945,
+        value: 'Admin'
+    },
+    {
+        code: 1979,
+        value: 'User'
+    }
+]

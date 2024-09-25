@@ -4,6 +4,7 @@ const { verifyAccessToken, isAdmin } = require('../middlewares/verifyToken')
 
 // Định nghĩa route POST cho việc đăng ký người dùng
 router.post('/register', ctrls.register)
+router.post('/mock', ctrls.createUsers)
 router.put('/finalregister/:token', ctrls.finalRegister)
 router.post('/login', ctrls.login)
 router.get('/current', verifyAccessToken, ctrls.getCurrent)
