@@ -15,7 +15,10 @@ import { FiGift } from "react-icons/fi";
 import { FaReplyAll } from "react-icons/fa";
 import { FaTty } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
-
+import { AiOutlineDashboard } from "react-icons/ai";
+import { MdGroups2 } from "react-icons/md";
+import { TbBrandProducthunt } from "react-icons/tb";
+import { FaMoneyBills } from "react-icons/fa6";
 
 const icons = {
     MdLocalPhone,
@@ -35,7 +38,11 @@ const icons = {
     FiGift,
     FaReplyAll,
     FaTty,
-    FaChevronDown
+    FaChevronDown,
+    AiOutlineDashboard,
+    MdGroups2,
+    TbBrandProducthunt,
+    FaMoneyBills
 }
 
 export default icons;

@@ -33,15 +33,15 @@ function App() {
         </Route>
 
         <Route path={path.ADMIN} element={<AdminLayout/>}>
-            <Route path={path.DASHBOARD} element={Dashboard} />
-            <Route path={path.MANAGE_ORDER} element={ManageOrder} />
-            <Route path={path.MANAGE_PRODUCTS} element={ManageProducts} />
-            <Route path={path.MANAGE_USER} element={ManageUser} />
-            <Route path={path.CREATE_PRODUCTS} element={CreateProducts} />
+            <Route path={path.DASHBOARD} element={<Dashboard />} />
+            <Route path={path.MANAGE_ORDER} element={<ManageOrder/>} />
+            <Route path={path.MANAGE_PRODUCTS} element={<ManageProducts/>} />
+            <Route path={path.MANAGE_USER} element={<ManageUser/>} />
+            <Route path={path.CREATE_PRODUCTS} element={<CreateProducts/>} />
         </Route>
 
         <Route path={path.MEMBER} element={<MemberLayout/>}>
-            <Route path={path.PERSONAL} element={Personal} />
+            <Route path={path.PERSONAL} element={<Personal/>} />
         </Route>
 
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />} />
