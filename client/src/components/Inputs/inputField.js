@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{memo} from 'react'
 import clsx from 'clsx'
 
 const InputField = ({value, setValue, nameKey, type, invalidFields, setInvalidFields , style, fullWidth, placeholder, isHideLabel}) => {
@@ -18,4 +18,4 @@ const InputField = ({value, setValue, nameKey, type, invalidFields, setInvalidFi
   )
 }
 
-export default InputField
+export default memo(InputField)
