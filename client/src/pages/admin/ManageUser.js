@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { apiGetUsers, apiUpdateUser } from '../../apis/user';
+import { apiGetUsers, apiUpdateUser, apiDeleteUser } from '../../apis/user';
 import { roles } from '../../ultils/contants';
 import moment from 'moment';
 import { InputField, Pagination, Select, InputForm ,Button} from '../../components';
@@ -7,6 +7,8 @@ import useDebounce from '../../hook/useDebounce';
 import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
+
 
 const ManageUser = () => {
   const { handleSubmit, register, formState: {errors}} = useForm({
@@ -52,9 +54,35 @@ const handleUpdate = async(data) => {
   if (response.success){  
      setEditElm(null)
      render();
-     toast.success(response.mes);
-  } else toast.error(response.mes);
+     toast.success(response.mes)
+  } else toast.error(response.mes)
 }
+const handleDeleteUser = async (uid) => {
+  const result = await Swal.fire({
+    title: 'Are you sure you want to delete?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, cancel!',
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const response = await apiDeleteUser(uid);
+      if (response.success) {
+        render(); // Cập nhật lại giao diện
+        toast.success(response.mes);
+      } else {
+        toast.error(response.mes);
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the user.');
+      console.error(error);
+    }
+  }
+};
+
 
   return (
     <div className='w-full pl-8'>
@@ -170,7 +198,7 @@ const handleUpdate = async(data) => {
                   <td className='py-2 px-4'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
                   <td className='py-2 px-4'>
                     { editElm?._id === el._id ? <span onClick={() => setEditElm(null)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Back</span> :   <span onClick={() => setEditElm(el)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Edit</span>}
-                    <span className='px-2 text-orange-600 hover:underline cursor-pointer'>Delete</span>
+                    <span onClick={() => handleDeleteUser(el._id) } className='px-2 text-orange-600 hover:underline cursor-pointer'>Delete</span>
                   </td>
                 </tr>
               ))}
