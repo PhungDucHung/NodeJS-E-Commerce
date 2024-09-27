@@ -3,19 +3,20 @@ import logo from '../../assets/logo_digital_new_250x.png';
 import { adminSidebar } from '../../ultils/contants';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
-import { AiOutlineCaretDown, AiOutlineCaretLeft } from 'react-icons/ai'
+import { AiOutlineCaretDown, AiOutlineCaretLeft } from 'react-icons/ai';
 
 const activedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-900 bg-gray-400';
 const notActivedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-900 hover:bg-gray-100';
 
 const AdminSidebar = () => {
-  const [actived, setActived] = useState([])
-  const handleShowTabs = (tabID) => {
-    if(actived.some(el => el === tabID)) setActived(prev => prev.filter(el => el!== tabID))
-    else setActived(prev => [...prev, tabID])
-  }
+  const [actived, setActived] = useState([]);
 
-  console.log(actived)
+  const handleShowTabs = (tabID) => {
+    setActived(prev => 
+      prev.includes(tabID) ? prev.filter(id => id !== tabID) : [...prev, tabID]
+    );
+  };
+
   return (
     <div className='bg-white h-full py-4'>
       <div className='flex flex-col justify-center items-center p-4 gap-2'>
@@ -35,29 +36,30 @@ const AdminSidebar = () => {
               </NavLink>
             )}
 
-            {el.type === 'PARENT' && 
-              <div onClick={() => handleShowTabs(el.id)} className='flex flex-col text-gray-900'>
-                <div className='flex items-center justify-between px-4 py-2 hover:bg-gray-400 cursor-pointer'>
+            {el.type === 'PARENT' && (
+              <div className='flex flex-col'>
+                <div onClick={() => handleShowTabs(el.id)} className='flex items-center justify-between px-4 py-2 hover:bg-gray-400 cursor-pointer text-gray-900'>
                   <div className='flex items-center gap-2'>
-                      <span>{el.icon}</span>
-                      <span>{el.text}</span>
+                    <span>{el.icon}</span>
+                    <span>{el.text}</span>
                   </div>
-                  {!actived.some(id => id === el.id) ? <AiOutlineCaretLeft/> : <AiOutlineCaretDown/>}
+                  {actived.includes(el.id) ? <AiOutlineCaretDown /> : <AiOutlineCaretLeft />}
                 </div>
-                {actived.some(id => +id === +el.id) && <div className='flex flex-col'>
-                  {el.submenu.map(item => (
-                    <NavLink 
-                      key={item.path}  // Sử dụng item.path để đảm bảo tính duy nhất
-                      to={item.path}
-                      className={({ isActive }) => clsx(isActive && activedStyle, !isActive && notActivedStyle ,'pl-10')}
-                    >
-                      {item.text}
-                    </NavLink>
-                  ))}
-                </div>}
-         
+                {actived.includes(el.id) && (
+                  <div className='flex flex-col pl-6'>
+                    {el.submenu.map(item => (
+                      <NavLink 
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) => clsx(isActive ? activedStyle : notActivedStyle, 'pl-10')}
+                      >
+                        {item.text}
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
               </div>
-            }
+            )}
           </Fragment>
         ))}
       </div>

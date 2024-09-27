@@ -29,6 +29,8 @@ export { default as Pagination } from './Pagination/Pagination';
 export { default as AdminSidebar } from './Sidebar/AdminSidebar';
 export { default as InputForm } from './Inputs/InputForm';
 export { default as Select } from './Inputs/Select';
+export { default as MarkdownEditor } from './Inputs/MarkdownEditor';
+
 
 
 
