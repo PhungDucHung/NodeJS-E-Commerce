@@ -242,3 +242,14 @@ export const roles = [
         value: 'User'
     }
 ]
+
+export const blockstatus = [
+    {
+        code: true,
+        value: 'Blocked'
+    },
+    {
+        code: false,
+        value: 'Active'
+    }
+]

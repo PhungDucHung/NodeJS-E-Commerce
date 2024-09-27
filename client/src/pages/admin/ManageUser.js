@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { apiGetUsers, apiUpdateUser, apiDeleteUser } from '../../apis/user';
-import { roles } from '../../ultils/contants';
+import { blockstatus, roles } from '../../ultils/contants';
 import moment from 'moment';
 import { InputField, Pagination, Select, InputForm ,Button} from '../../components';
 import useDebounce from '../../hook/useDebounce';
@@ -17,7 +17,7 @@ const ManageUser = () => {
     lastname: '',
     role: '',
     phone: '',
-    status: '',
+    isB: '',
   })
 
   const [users, setUsers] = useState([]);
@@ -169,9 +169,22 @@ const handleDeleteUser = async (uid) => {
                       <span>{el.lastname}</span>
                     )}
                   </td>
+                  
                   <td className='py-2 px-4'>
-                    {editElm?._id === el._id ? <Select /> : <span>{roles.find(role => +role.code === +el.role)?.value}</span>}
+                    {editElm?._id === el._id ?
+                     <Select 
+                        register={register}
+                        fullWidth
+                        errors={errors}
+                        defaultValue={el.role}
+                        id={'role'}
+                        validate={{ required: "Role is required" }}
+                        options={roles}
+
+                     /> 
+                     : <span>{roles.find(role => +role.code === +el.role)?.value}</span>}
                   </td>
+
                   <td className='py-2 px-4'>
                     {editElm?._id === el._id ? (
                       <InputForm
@@ -193,11 +206,21 @@ const handleDeleteUser = async (uid) => {
                     )}
                   </td>
                   <td className='py-2 px-4'>
-                    {editElm?._id === el._id ? <Select /> : <span>{el.isBlocked ? 'Blocked' : 'Active'}</span>}
+                        {editElm?._id === el._id ? 
+                        <Select 
+                            register={register}
+                            fullWidth
+                            errors={errors}
+                            defaultValue={el.isBlocked}
+                            id={'isBlocked'}
+                            validate={{ required: "Lastname is required" }} 
+                            options={blockstatus}                  
+                    /> 
+                    : <span>{el.isBlocked ? 'Blocked' : 'Active'}</span>}
                   </td>
                   <td className='py-2 px-4'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
                   <td className='py-2 px-4'>
-                    { editElm?._id === el._id ? <span onClick={() => setEditElm(null)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Back</span> :   <span onClick={() => setEditElm(el)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Edit</span>}
+                    { editElm?._id === el._id ? <span onClick={() => setEditElm(null)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Back</span> : <span onClick={() => setEditElm(el)} className='px-2 text-orange-600 hover:underline cursor-pointer'>Edit</span>}
                     <span onClick={() => handleDeleteUser(el._id) } className='px-2 text-orange-600 hover:underline cursor-pointer'>Delete</span>
                   </td>
                 </tr>
