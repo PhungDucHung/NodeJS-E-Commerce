@@ -47,19 +47,31 @@ const getProducts = asyncHandler(async (req, res) => {
     const formattedQueries = JSON.parse(queryString);
     let colorQueryObject = {};
 
-    // Filtering
     if (queries?.title) formattedQueries.title = { $regex: queries.title, $options: 'i' }; 
     if (queries?.category) formattedQueries.category = { $regex: queries.category, $options: 'i' }; 
     if (queries?.color) {
         delete formattedQueries.color;
-        const colorArr = queries.color?.split(',')
-        const colorQuery = colorArr.map(el => ({color: { $regex: el, $options: 'i'} }))
-        colorQueryObject = {$or: colorQuery}
+        const colorArr = queries.color?.split(',');
+        const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: 'i' } }));
+        colorQueryObject = { $or: colorQuery };
     }
-    const q = {...colorQueryObject, ...formattedQueries}
-    let queryCommand = Product.find(q);
 
-    // Xử lý sắp xếp ( sorting )
+    let queryObject = {};
+    if (queries?.q) {
+        delete formattedQueries.q;
+        queryObject = { $or: [
+            { color: { $regex: queries.q, $options: 'i' } },
+            { title: { $regex: queries.q, $options: 'i' } },
+            { category: { $regex: queries.q, $options: 'i' } },
+            { brand: { $regex: queries.q, $options: 'i' } },
+            { description: { $regex: queries.q, $options: 'i' } },
+        ]};
+    }
+
+    const qr = { ...colorQueryObject, ...formattedQueries, ...queryObject };
+    let queryCommand = Product.find(qr);
+
+    // Xử lý sắp xếp (sorting)
     if (req.query.sort) {
         const sortBy = req.query.sort.split(',').join(' ');
         queryCommand = queryCommand.sort(sortBy);
@@ -71,28 +83,28 @@ const getProducts = asyncHandler(async (req, res) => {
         queryCommand = queryCommand.select(fields);
     }
 
-      // Xử lý phân trang
-      const page = +req.query.page || 1; // Chuyển đổi page thành số, mặc định là 1 nếu không được cung cấp
-      const limit = +req.query.limit || +process.env.LIMIT_PRODUCTS; // Chuyển đổi limit thành số, mặc định từ biến môi trường
-      const skip = (page - 1) * limit; // Tính số lượng tài liệu cần bỏ qua
-  
-      queryCommand = queryCommand.skip(skip).limit(limit); // Áp dụng phân trang cho truy vấn
-  
-      try {
-          // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
-          const products = await queryCommand.exec();
-          const count = await Product.find(q).countDocuments();
-  
-          return res.status(200).json({
-              success: products.length > 0,
-              counts: count,
-              products: products.length > 0 ? products : 'Không thể lấy sản phẩm'
-          });
-      } catch (err) {
-          // Xử lý lỗi và trả về mã trạng thái 500 với thông báo lỗi
-          return res.status(500).json({ success: false, message: err.message });
-      }
-  });
+    // Xử lý phân trang
+    const page = +req.query.page || 1; // Chuyển đổi page thành số, mặc định là 1 nếu không được cung cấp
+    const limit = +req.query.limit || +process.env.LIMIT_PRODUCTS; // Chuyển đổi limit thành số, mặc định từ biến môi trường
+    const skip = (page - 1) * limit; // Tính số lượng tài liệu cần bỏ qua
+
+    queryCommand = queryCommand.skip(skip).limit(limit); // Áp dụng phân trang cho truy vấn
+
+    try {
+        // Thực hiện truy vấn và đếm tổng số tài liệu phù hợp với bộ lọc
+        const products = await queryCommand.exec();
+        const count = await Product.countDocuments(qr); // Sửa ở đây
+
+        return res.status(200).json({
+            success: products.length > 0,
+            counts: count,
+            products: products.length > 0 ? products : 'Không thể lấy sản phẩm'
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 
 
 

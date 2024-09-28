@@ -3,16 +3,16 @@ import { InputForm , Pagination } from '../../components';
 import { useForm } from 'react-hook-form'
 import { apiGetProducts } from '../../apis/product';
 import moment from 'moment';
+import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import useDebounce from '../../hook/useDebounce'
 
 const ManageProducts = () => {
-
-  const {register, formState: {errors}, handleSubmit ,reset } = useForm()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [params] = useSearchParams();
+  const {register, formState: {errors}, handleSubmit ,reset ,watch } = useForm()
   const [products, setProducts] = useState(null)
   const [counts, setCounts] = useState(0)
-
-  const handleSearchProduct = (data) => {
-      console.log(data)
-  }
 
   const fetchProducts = async (params) => {
     const response = await apiGetProducts({...params,  limit: process.env.REACT_APP_LIMIT });
@@ -22,9 +22,24 @@ const ManageProducts = () => {
     }
   }
   
+  const queryDebounce = useDebounce(watch('q'),800)
+
   useEffect(() => {
-      fetchProducts()
-  },[])
+    if (queryDebounce){
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ q: queryDebounce }).toString(),
+      })
+    }else navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ q: queryDebounce }).toString(),
+    })
+  },[queryDebounce])
+
+  useEffect(() => {
+      const searchParams = Object.fromEntries([...params]);
+      fetchProducts(searchParams)
+  },[params]);
 
   console.log(products)
   return (
@@ -34,7 +49,7 @@ const ManageProducts = () => {
         <h1 className='text-3xl font-bold tracking-tight '>Manage Products</h1>
       </div>
       <div className='flex justify-end items-center px-4 '>
-          <form className='w-[45%]' onSubmit={handleSubmit(handleSearchProduct)} >
+          <form className='w-[45%]' >
               <InputForm
                   id='q'
                   register={register}
@@ -64,7 +79,7 @@ const ManageProducts = () => {
           <tbody>
               {products?.map((el, idx) => (
                   <tr className='border-b' key={el._id}>
-                      <td className='text-center py-2'>{idx+1}</td>
+                      <td className='text-center py-2'>{((+params.get('page') > 1 ? +params.get('page')-1 : 0 ) * process.env.REACT_APP_LIMIT) + idx + 1}</td>
                       <td className='text-center py-2'>
                           <img src={el.thumb} alt='thumb' className='w-12 h-12 object-cover'/>
                       </td>
