@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { InputForm, Select, Button, MarkdownEditor, Loading } from '../../components';
 import { useForm } from 'react-hook-form';
-import { useSelector, useDispatch } from 'react-redux';
 import { validate, getBase64 } from '../../ultils/helpers';
 import { toast } from 'react-toastify';
 import { BsTrash } from "react-icons/bs";
 import { apiCreateProduct } from '../../apis'
 import { showModal } from '../../store/app/appSlice'
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const CreateProducts = () => {
   const { categories } = useSelector(state => state.app);
@@ -169,7 +170,7 @@ const CreateProducts = () => {
             />
             <Select
               label='Brand (Optional)'
-              options={categories?.find(el => el._id === watch('category'))?.brand?.map(el => ({ code: el, value: el }))}
+              options={categories?.find(el => el.title?.toLowerCase() === watch('category')?.toLowerCase())?.brand?.map(el => ({ code: el, value: el }))}
               register={register}
               id='brand'
               validate={{ required: false }} // Brand is optional
