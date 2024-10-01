@@ -6,6 +6,8 @@ import moment from 'moment';
 import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import useDebounce from '../../hook/useDebounce'
 import UpdateProduct from './UpdateProduct'
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify'
 
 
 const ManageProducts = () => {
@@ -49,7 +51,25 @@ const ManageProducts = () => {
   },[params, update]);
 
 
-  console.log(products)
+  const handleDeleteProduct = (pid) => {
+      Swal.fire({
+        title: 'Are you sure ?',
+        text: 'Are you sure you want to delete',
+        icon: 'warning',
+        showCancelButton: true
+      }).then(async(rs) => {
+        if(rs.isConfirmed){
+            const response = await apiDeleteProduct(pid)
+            if(response.success) toast.success(response.mes)
+            else toast.error(response.mes)
+            render()
+        }else{
+          
+        }
+
+      })
+  };
+
   return (
     <div className='w-full flex flex-col gap-4 relative'>
       {editProduct &&  <div className='absolute inset-0 min-h-screen bg-gray-100 z-50'>
@@ -111,7 +131,7 @@ const ManageProducts = () => {
                       <span onClick={() => setEditProduct(el)} className='text-blue-500 hover:underline cursor-pointer px-1'>
                           Edit
                       </span>
-                          <span className='text-blue-500 hover:underline cursor-pointer px-1'>Remove</span>
+                          <span onClick={() => handleDeleteProduct(el._id)} className='text-blue-500 hover:underline cursor-pointer px-1'>Remove</span>
                       </td>
 
                   </tr>
