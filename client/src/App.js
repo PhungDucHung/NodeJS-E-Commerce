@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Login, Home, Public, FAQ, Services, DetailProduct, Blogs, Products, FinalRegister, ResetPassword} from './pages/public';
 import { AdminLayout, ManageOrder,ManageProducts,ManageUser ,CreateProducts, Dashboard } from '../src/pages/admin'
-import { MemberLayout ,Personal } from '../src/pages/member'
+import { MemberLayout ,Personal, History ,MyCart ,Wishlist } from '../src/pages/member'
 import path from './ultils/path';
 import { getCategories } from './store/app/asyncActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal } from './components';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,10 @@ function App() {
 
         <Route path={path.MEMBER} element={<MemberLayout/>}>
             <Route path={path.PERSONAL} element={<Personal/>} />
+            <Route path={path.MY_CART} element={<MyCart id='cart'/>} />
+            <Route path={path.WISHLIST} element={<Wishlist/>} />
+            <Route path={path.HISTORY} element={<History/>} />
+
         </Route>
 
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />} />

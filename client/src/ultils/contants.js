@@ -253,3 +253,36 @@ export const blockstatus = [
         value: 'Active'
     }
 ]
+
+export const memberSidebar = [
+    {
+        id: 1,
+        type: 'SINGLE',
+        text: 'Personal',
+        path: `/${path.MEMBER}/${path.PERSONAL}`,
+        icon: <AiOutlineDashboard size={20}/>
+    },
+    {
+        id: 2,
+        type: 'SINGLE',
+        text: 'My cart',
+        path: `/${path.MEMBER}/${path.MY_CART}`,
+        icon: <MdGroups2 size={20}/>
+    },
+
+    {
+        id: 3,
+        type: 'SINGLE',
+        text: 'Buy histories',
+        path: `/${path.MEMBER}/${path.HISTORY}`,
+        icon: <FaMoneyBills size={20}/>
+    },
+
+    {
+        id: 4,
+        type: 'SINGLE',
+        text: 'Wishlist',
+        path: `/${path.MEMBER}/${path.WISHLIST}`,
+        icon: <FaMoneyBills size={20}/>
+    },
+] 
