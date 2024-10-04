@@ -12,7 +12,6 @@ const breakpointColumnsObj = {
   500: 1
 };
 
-
 const Products = () => {
   const navigate = useNavigate()
   const [products, setProducts] = useState(null)

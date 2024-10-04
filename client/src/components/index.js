@@ -18,6 +18,7 @@ export { default as Breadcrumb} from './Common/Breadcrumb';
 export { default as SelectQuantity} from './Common/SelectQuantity';
 export { default as ProductExtraInfoItem} from './Products/productExtraInfoItem';
 export { default as ProductInformation} from './Products/ProductInformation';
+export { default as Cart} from './Products/Cart';
 export { default as SearchItem} from './Search/SearchItem';
 export { default as InputSelect} from './Inputs/inputSelect';
 export { default as Votebar} from './Vote/Votebar';
