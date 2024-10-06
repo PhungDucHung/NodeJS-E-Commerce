@@ -3,7 +3,7 @@ import bg from '../../assets/bg.jpg'
 import {InputField , Button} from '../../components'
 import { apiRegister, apiLogin, apiForgotPassword, apiFinalRegister } from '../../apis/user'
 import Swal from 'sweetalert2'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import path from '../../ultils/path'
 // src/components/Login.js
 import { login } from '../../store/user/userSlice';
@@ -27,6 +27,8 @@ const navigate = useNavigate()
   const [invalidFields, setInvalidFields] = useState([])
   const [isRegister, setIsRegister] = useState(false) 
   const [isForgotPassword, setIsForgotPassword] = useState(false)
+  const [searchParams] = useSearchParams()
+  console.log(searchParams.get('redirectt'))
   const resetPayload = () => {
   setPayload({
     email: '',
@@ -53,7 +55,6 @@ const navigate = useNavigate()
   const handleSubmit = useCallback(async() => {
       const {firstname , lastname, mobile, ...data} = payload
       const invalids = isRegister ? validate(payload ,setInvalidFields) : validate(data, setInvalidFields)
-      console.log('invalids', invalids)
       if (invalids === 0){
         if(isRegister) {
             const response = await apiRegister(payload)
@@ -65,7 +66,7 @@ const navigate = useNavigate()
             const rs = await apiLogin(data)
             if(rs.success) {
               dispatch(login({isLoggedIn: true, token: rs.accessToken, userData: rs.userData}))
-              navigate(`/${path.HOME}`)
+              searchParams.get('redirect') ? navigate(searchParams.get('redirect')) : navigate(`/${path.HOME}`)
             }else Swal.fire('Oops', rs.mes, 'error' )
           }
       }

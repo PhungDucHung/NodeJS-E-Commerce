@@ -20,7 +20,7 @@ router.delete('/:uid', [verifyAccessToken, isAdmin], ctrls.deleteUser)
 router.put('/current', verifyAccessToken,uploader.single('avatar') ,ctrls.updateUser)
 router.put('/address/', [verifyAccessToken], ctrls.updateUserAddress)
 router.put('/cart', [verifyAccessToken], ctrls.updateCart)
-router.delete('/remove-cart/:pid', [verifyAccessToken], ctrls.removeProductInCart)
+router.delete('/remove-cart/:pid/:color', [verifyAccessToken], ctrls.removeProductInCart)
 router.put('/:uid', [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin)
 
 

@@ -5,7 +5,8 @@ export const productSlice = createSlice({
   name: 'product',
   initialState: {
     newProducts: null,
-    errorMessage: ''
+    errorMessage: '',
+    currentCart: []
   },
   reducers: {
     // Các reducers khác nếu có
