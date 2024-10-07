@@ -3,7 +3,7 @@ const path = {
     HOME: '',
     ALL : '*',
     LOGIN: 'login',
-    PRODUCTS: ':category',
+    PRODUCTS__CATEGORY: ':category',
     BLOGS: 'blogs',
     OUR_SERVICES: 'services',
     FAQ: 'faqs',
@@ -11,6 +11,8 @@ const path = {
     FINAL_REGISTER: 'finalregister/:status',
     RESET_PASSWORD: 'reset-password/:token',
     DETAIL_CART: 'my-cart',
+    CHECKOUT: 'checkout',
+    PRODUCTS: 'products',
 
     // Admin
     ADMIN: 'admin',

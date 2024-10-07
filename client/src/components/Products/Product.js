@@ -17,9 +17,10 @@ import { toast } from 'react-toastify'
 import path from '../../ultils/path'
 import { BsCartCheckFill , } from "react-icons/bs";
 import { FaShoppingCart } from "react-icons/fa";
+import { createSearchParams } from 'react-router-dom'
 
 const {FaEye , FaHeart} = icons
-const Product = ({productData, isNew, normal, navigate, dispatch }) => {
+const Product = ({productData, isNew, normal, navigate, dispatch, location }) => {
   const [isShowOption, setIsShowOption] = useState(false)
   const { current } = useSelector(state => state.user)
   const handleClickOptions = async(e, flag) => {
@@ -32,11 +33,22 @@ const Product = ({productData, isNew, normal, navigate, dispatch }) => {
               cancelButtonText: 'Not now!',
               showCancelButton: true,
               confirmButtonText: 'Go Login Page'
-          }).then((rs) => {
-              if(rs.isConfirmed) navigate(`/${path.LOGIN}`)
+          }).then( async (rs) => {
+              if(rs.isConfirmed) navigate({
+                pathname: `/${path.LOGIN}`,
+                search: createSearchParams({ redirect: location.pathname }).toString()
+              })
           });
 
-          const response = await apiUpdateCart({pid: productData._id, color: productData.color})
+          const response = await apiUpdateCart({
+            pid: productData?._id, 
+            color: productData?.color, 
+            quantity: 1,
+            price: productData?.price,
+            thumbnail: productData?.thumb,
+            title: productData?.title,
+            
+          })
           if(response.success) {
             toast.success(response.mes)
             dispatch(getCurrent())
@@ -49,6 +61,7 @@ const Product = ({productData, isNew, normal, navigate, dispatch }) => {
       }
 }
 
+console.log(productData)
   return (
     <div className='w-full text-base px-[10px]'>
         <div className='w-full border p-[15px] flex flex-col items-center'

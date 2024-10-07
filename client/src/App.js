@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Login, Home, Public, FAQ, Services, DetailProduct, Blogs, Products, FinalRegister, ResetPassword, DetailCart } from './pages/public';
 import { AdminLayout, ManageOrder,ManageProducts,ManageUser ,CreateProducts, Dashboard } from '../src/pages/admin'
-import { MemberLayout ,Personal, History ,MyCart ,Wishlist } from '../src/pages/member'
+import { MemberLayout ,Personal, History ,MyCart ,Wishlist, Checkout } from '../src/pages/member'
 import path from './ultils/path';
 import { getCategories } from './store/app/asyncActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,14 +26,14 @@ function App() {
       </div>}
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
-        <Route path={path.PUBLIC} element={<Public />}>
+          <Route path={path.CHECKOUT} element={<Checkout/>} />
+          <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />} />
           <Route path={path.BLOGS} element={<Blogs />} />
           <Route path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE} element={<DetailProduct />} />
           <Route path={path.FAQ} element={<FAQ />} />
           <Route path={path.OUR_SERVICES} element={<Services />} />
-          <Route path={path.PRODUCTS} element={<Products/>} />
-          <Route path={path.DETAIL_CART} element={<DetailCart/>} />
+          <Route path={path.PRODUCTS__CATEGORY} element={<Products/>} />
           <Route path={path.RESET_PASSWORD} element={<ResetPassword/>} />
 
         </Route>
@@ -48,7 +48,7 @@ function App() {
 
         <Route path={path.MEMBER} element={<MemberLayout/>}>
             <Route path={path.PERSONAL} element={<Personal/>} />
-            <Route path={path.MY_CART} element={<MyCart id='cart'/>} />
+            <Route path={path.MY_CART} element={<DetailCart/>} />
             <Route path={path.WISHLIST} element={<Wishlist/>} />
             <Route path={path.HISTORY} element={<History/>} />
 

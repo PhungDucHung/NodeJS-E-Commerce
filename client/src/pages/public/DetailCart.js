@@ -2,18 +2,50 @@ import React from 'react';
 import OrderItem from '../../components/Products/OrderItem';
 import { useSelector } from 'react-redux';
 import withBaseComponent from '../../hocs/withBaseComponent';
-import { Breadcrumb, Button, SelectQuantity } from '../../components';
+import { Breadcrumb } from '../../components';
 import { formatMoney } from '../../ultils/helpers';
+import { createSearchParams, Link } from 'react-router-dom';
+import path from '../../ultils/path';
+import Swal from 'sweetalert2';
 
-const DetailCart = ({ location }) => {
-    const { currentCart } = useSelector(state => state.user);
+const DetailCart = ({ location, navigate }) => {
+    const { currentCart, current } = useSelector(state => state.user);
+
+    const handleChangeQuantites = (id, quantity, color) => {
+        // Xử lý cập nhật số lượng sản phẩm trong giỏ hàng ở đây
+        console.log(`Product ID: ${id}, Quantity: ${quantity}, Color: ${color}`);
+        // Có thể gọi một action của Redux để cập nhật giỏ hàng
+    };
+
+    const handleSubmit = () => {
+        if (!current?.address) {
+            return Swal.fire({
+                icon: 'info',
+                title: 'Almost!',
+                text: 'Please update your address before checkout',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Go Update',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate({
+                        pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+                        search: createSearchParams({ redirect: location.pathname }).toString(),
+                    });
+                }
+            });
+        } else {
+            window.open(`/${path.CHECKOUT}`, '_blank');
+        }
+    };
 
     return (
         <div className='w-full'>
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
-                    <h3 className='font-semibold uppercase'>My Cart</h3>
-                    <Breadcrumb category={location?.pathname} />
+                    <h3 className='font-semibold text-2xl uppercase'>My Cart</h3>
+                    <Breadcrumb category={location?.pathname?.replace('/', '')?.split('-')?.join(' ')} />
                 </div>
             </div>
 
@@ -29,6 +61,7 @@ const DetailCart = ({ location }) => {
                         key={el._id}
                         el={el}
                         defaultQuantity={el.quantity}
+                        handleChangeQuantites={handleChangeQuantites} // Truyền hàm vào đây
                     />
                 ))}
             </div>
@@ -41,7 +74,7 @@ const DetailCart = ({ location }) => {
                     </span>
                 </span>
                 <span className='text-xs italic'>Chi phí vận chuyển, thuế và giảm giá sẽ được tính khi thanh toán</span>
-                <Button>Thanh Toán</Button>
+                <Link target='_blank' className='bg-main text-white px-4 py-2 rounded-md' to={`/${path.CHECKOUT}`}>Thanh Toán</Link>
             </div>
         </div>
     );

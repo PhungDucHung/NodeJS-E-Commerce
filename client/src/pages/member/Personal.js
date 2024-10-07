@@ -8,11 +8,15 @@ import avatar from '../../assets/avatar.jpg'
 import { apiUpdateCurrent } from '../../apis';
 import { getCurrent } from '../../store/user/asyncActions';
 import { toast } from 'react-toastify'
+import { useSearchParams } from 'react-router-dom';
+import withBaseComponent from '../../hocs/withBaseComponent';
 
-const Personal = () => {
+const Personal = ({navigate}) => {
   const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm();
   const { current } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  console.log(searchParams.get('redirect'))
 
   useEffect(() => {
     if (current) {
@@ -21,43 +25,31 @@ const Personal = () => {
         lastname: current.lastname,
         mobile: current.mobile,
         email: current.email,
-        avatar: current.avatar
+        avatar: current.avatar,
+        address: current.address,
       });
     }
   }, [current, reset]);
 
   const handleUpdateInfor = async (data) => {
-    const formData = new FormData();
+    const formData = new FormData();    
+    if (data.avatar.length > 0) {
+        formData.append('avatar', data.avatar[0]);
+        delete data.avatar; 
+    }
+    for (let i of Object.entries(data)) formData.append(i[0], i[1]);
     
-    // Kiểm tra avatar và thêm vào formData
-    if (data.avatar && data.avatar.length > 0) {
-      formData.append('avatar', data.avatar[0]);
-      delete data.avatar; // Xóa avatar khỏi data
-    }
-  
-    // Chuyển đổi các trường từ mảng thành chuỗi (nếu cần)
-    for (let [key, value] of Object.entries(data)) {
-      if (Array.isArray(value)) {
-        formData.append(key, value.join(', ')); // Chuyển mảng thành chuỗi
-      } else {
-        formData.append(key, value);
-      }
-    }
-  
-    try {
-      const response = await apiUpdateCurrent(formData);
-      if (response.success) { 
-        dispatch(getCurrent());
+    const response = await apiUpdateCurrent(formData);
+    
+    if (response.success) {
+        dispatch(getCurrent()); // Sửa dòng này
         toast.success(response.mes);
-      } else {
+        if (searchParams.get('redirect')) navigate(searchParams.get('redirect'));
+    } else {
         toast.error(response.mes);
-      }
-    } catch (error) {
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại.');
-      console.error(error); // In lỗi ra console để dễ dàng debug
     }
-  };
-  
+};
+
 
   return (
     <div className='w-full relative px-4'>
@@ -109,6 +101,17 @@ const Personal = () => {
           }}
         />
 
+        <InputForm
+          label='Địa chỉ'
+          register={register}
+          errors={errors}
+          id='address'
+          validate={{
+            required: 'Vui lòng điền trường này',
+          }}
+        />
+
+
         <div className='flex items-center gap-2'>
           <span className='font-medium'>Trạng Thái Tài Khoản:</span>
           <span>{current?.isBlocked ? 'Đã Bị Khóa' : 'Đang Hoạt Động'}</span>
@@ -136,4 +139,4 @@ const Personal = () => {
   );
 }
 
-export default Personal;
+export default withBaseComponent(Personal)

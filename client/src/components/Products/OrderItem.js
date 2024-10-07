@@ -6,7 +6,8 @@ import { updateCart } from '../../store/user/userSlice'; // Import updateCart
 import withBaseComponent from '../../hocs/withBaseComponent';
 
 
-const OrderItem = ({ el, defaultQuantity = 1 }) => {
+const OrderItem = ({ el, handleChangeQuantites, defaultQuantity = 1 }) => {
+    console.log(defaultQuantity)
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(defaultQuantity);
     const handleQuantity = (number) => {
@@ -18,6 +19,11 @@ const OrderItem = ({ el, defaultQuantity = 1 }) => {
         if (flag === 'minus') setQuantity(prev => +prev - 1);
         if (flag === 'plus') setQuantity(prev => +prev + 1);
     };
+    console.log(el)
+    useEffect(() => {
+        handleChangeQuantites && handleChangeQuantites(el.product?._id, quantity, el.color)
+    },[quantity])
+
     useEffect(() => {
         dispatch(updateCart({ pid: el.product?._id, quantity, color: el.color }));
     }, [quantity]);
@@ -43,7 +49,7 @@ const OrderItem = ({ el, defaultQuantity = 1 }) => {
                 </div>
             </span>
             <span className='col-span-3 w-full h-full flex items-center justify-center text-center'>
-                <span className='text-lg'>{formatMoney(el.product?.price * quantity) + ' VNĐ'}</span>
+                <span className='text-lg'>{formatMoney(el.price * quantity) + ' VNĐ'}</span>
             </span>
         </div>
     );

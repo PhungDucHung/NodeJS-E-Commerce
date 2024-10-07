@@ -5,6 +5,9 @@ import { NavLink, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { AiOutlineCaretDown, AiOutlineCaretLeft } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
+import { IoReturnUpForwardOutline } from "react-icons/io5";
+
+
 
 const activedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-900 bg-gray-400';
 const notActivedStyle = 'px-4 py-2 flex items-center gap-2 text-gray-900 hover:bg-gray-100';
@@ -61,8 +64,15 @@ const MemberSidebar = () => {
                     )}
                 </div>
                 )}
+              
             </Fragment>
             ))}
+        <NavLink 
+            to={'/'}
+            className={clsx(notActivedStyle)}
+        >
+            <IoReturnUpForwardOutline size={18}/> Home
+        </NavLink>
         </div>
         </div>
     );

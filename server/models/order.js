@@ -2,9 +2,12 @@ const mongoose = require('mongoose');
 
 var orderSchema = new mongoose.Schema({
     products: [{
-        product: { type: mongoose.Types.ObjectId , ref: 'Product'},
-        count: Number,
-        color: String
+        product: {type: mongoose.Types.ObjectId,  ref: 'Product'  },
+        quantity: Number,
+        color: String,
+        price: Number,
+        thumbnail: String,
+        title: String,
     }],
     status:{
         type:String,
@@ -12,10 +15,7 @@ var orderSchema = new mongoose.Schema({
         enum: ['Cancelled', 'Processing', 'Successed']
     },
     total : Number,
-    coupon:{
-        type: mongoose.Types.ObjectId, 
-        ref: 'Coupon'
-    },
+
     orderBy:{
         type: mongoose.Types.ObjectId, 
         ref: 'User'

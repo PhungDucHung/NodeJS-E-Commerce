@@ -21,10 +21,10 @@ const Products = () => {
   const { category } = useParams()
 
   const fetchProductsByCategory = async(queries) => {
-    const response = await apiGetProducts({...queries, category})
+    if (category && category !== 'products') queries.category  = category
+    const response = await apiGetProducts({queries})
     if (response.success) setProducts(response)
   }
-
 
   useEffect(() => {
     const queries = Object.fromEntries([...params])
@@ -71,7 +71,7 @@ const Products = () => {
     <div className='w-full uppercase'>
           <div className='h-[81px] flex justify-center items-center bg-gray-100'>
             <div className='w-main'>
-              <h3 className='font-semibold uppercase'>{category}</h3>
+              <h3 className='font-semibold uppercase'>{category} 123</h3>
               <Breadcrumb category={category} />
             </div>
           </div>

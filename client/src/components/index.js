@@ -32,6 +32,7 @@ export { default as InputForm } from './Inputs/InputForm';
 export { default as Select } from './Inputs/Select';
 export { default as MarkdownEditor } from './Inputs/MarkdownEditor';
 export { default as Loading } from './Common/Loading';
+export { default as Paypal } from './Common/Paypal';
 export { default as MemberSidebar } from './Sidebar/MemberSidebar';
 
 
