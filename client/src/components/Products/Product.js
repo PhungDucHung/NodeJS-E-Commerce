@@ -8,8 +8,7 @@ import icons from '../../ultils/icons'
 import withBaseComponent from '../../hocs/withBaseComponent'
 import { showModal } from '../../store/app/appSlice'
 import DetailProduct from '../../pages/public/DetailProduct'
-import { FaCartPlus } from "react-icons/fa6";
-import { apiUpdateCart } from '../../apis'
+import { apiUpdateCart, apiUpdateWishlist } from '../../apis'
 import { getCurrent } from '../../store/user/asyncActions'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
@@ -20,7 +19,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { createSearchParams } from 'react-router-dom'
 
 const {FaEye , FaHeart} = icons
-const Product = ({productData, isNew, normal, navigate, dispatch, location }) => {
+const Product = ({productData, isNew, normal, navigate, dispatch, location, pid }) => {
   const [isShowOption, setIsShowOption] = useState(false)
   const { current } = useSelector(state => state.user)
   const handleClickOptions = async(e, flag) => {
@@ -47,7 +46,6 @@ const Product = ({productData, isNew, normal, navigate, dispatch, location }) =>
             price: productData?.price,
             thumbnail: productData?.thumb,
             title: productData?.title,
-            
           })
           if(response.success) {
             toast.success(response.mes)
@@ -55,13 +53,18 @@ const Product = ({productData, isNew, normal, navigate, dispatch, location }) =>
           }
           else toast.error(response.mes)
       } 
-      if(flag === 'WISHLIST') console.log('WISHLIST')
+      if(flag === 'WISHLIST') {
+        const response = await apiUpdateWishlist(pid)
+        if(response.success) {
+          dispatch(getCurrent())
+          toast.success(response.mes)
+        } else toast.error(response.mes)
+      }
       if(flag === 'QUICK_VIEW') {
             dispatch(showModal({ isShowModal: true, modalChildren: <DetailProduct data={{pid: productData?._id, category: productData?.category }} isQuickView/> }))
       }
 }
 
-console.log(productData)
   return (
     <div className='w-full text-base px-[10px]'>
         <div className='w-full border p-[15px] flex flex-col items-center'
@@ -78,10 +81,10 @@ console.log(productData)
       <div className='w-full relative'>
           {isShowOption && <div className='absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top'>
               <span title='Quick view' onClick={(e) => handleClickOptions(e,'QUICK_VIEW')}><SelectOption icon={<FaEye/>}/></span>
-              {current?.cart?.some(el => el.product === productData._id.toString() ) 
+              {current?.cart?.some(el => el.product === productData?._id?.toString() ) 
                   ? <span title='Added to Cart'><SelectOption icon={<BsCartCheckFill color='green'/>}/></span> 
                   : <span title='Add to Cart'  onClick={(e) => handleClickOptions(e,'CART')}><SelectOption icon={<FaShoppingCart color='green'/>}/></span> }
-              <span title='Add to wishlist' onClick={(e) => handleClickOptions(e,'WISHLIST')}><SelectOption icon={<FaHeart/>}/></span>
+              <span title='Add to wishlist' onClick={(e) => handleClickOptions(e,'WISHLIST')}><SelectOption icon={<FaHeart color={current?.wishlist?.some(i => i === pid) ? 'pink' : 'white' }/>}/></span>
           </div>}
           <img 
               src={productData?.thumb || 'https://niteair.co.uk/wp-content/uploads/2023/08/default-product-image.png'} alt='' className='w-[274px] h-[274px] object-cover' 

@@ -6,10 +6,12 @@ export const productSlice = createSlice({
   initialState: {
     newProducts: null,
     errorMessage: '',
-    currentCart: []
+    dealDaily: null
   },
   reducers: {
-    // Các reducers khác nếu có
+    getDealDaily: (state, action) => {
+      state.dealDaily = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getNewProducts.pending, (state) => {
@@ -26,5 +28,5 @@ export const productSlice = createSlice({
     });
   }
 });
-
+export const { getDealDaily } = productSlice.actions;
 export default productSlice.reducer;

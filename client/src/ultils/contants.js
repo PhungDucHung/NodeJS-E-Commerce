@@ -273,14 +273,6 @@ export const memberSidebar = [
     {
         id: 3,
         type: 'SINGLE',
-        text: 'Buy histories',
-        path: `/${path.MEMBER}/${path.HISTORY}`,
-        icon: <FaMoneyBills size={20}/>
-    },
-
-    {
-        id: 4,
-        type: 'SINGLE',
         text: 'Wishlist',
         path: `/${path.MEMBER}/${path.WISHLIST}`,
         icon: <FaMoneyBills size={20}/>

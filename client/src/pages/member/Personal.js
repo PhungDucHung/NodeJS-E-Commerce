@@ -50,7 +50,6 @@ const Personal = ({navigate}) => {
     }
 };
 
-
   return (
     <div className='w-full relative px-4'>
       <header className='text-3xl font-semibold py-4 border-b-blue-200'>
@@ -110,7 +109,6 @@ const Personal = ({navigate}) => {
             required: 'Vui lòng điền trường này',
           }}
         />
-
 
         <div className='flex items-center gap-2'>
           <span className='font-medium'>Trạng Thái Tài Khoản:</span>

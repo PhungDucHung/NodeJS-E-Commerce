@@ -29,17 +29,10 @@ const getBlogs = asyncHandler(async(req,res)=>{
     })
 })
 
-/*
- khi một người dùng like một bài blog thì :
- 1. Check xem người đó trước đó có dislike hay không => bỏ dislike
- 2. Check xem người đó trước đó có like không => bỏ like / thêm like
- */
-// pull
-// push 
+
 const likeBlog = asyncHandler(async(req, res)=>{
     const {_id} = req.user
     const {bid} = req.params
-    if (!bid) throw new Error('Missing inputs')
     const blog = await Blog.findById(bid)
     const alreadyDisliked = blog?.dislikes?.find(el => el.toString() === _id)
     if (alreadyDisliked){

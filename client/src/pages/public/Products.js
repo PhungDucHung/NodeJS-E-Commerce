@@ -108,7 +108,7 @@ const Products = () => {
                   {products?.products?.map(el => (
                       <Product
                         key={el._id}
-                        pid={el.id}
+                        pid={el._id}
                         productData={el}
                         normal = {true}
                   />

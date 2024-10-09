@@ -50,8 +50,6 @@ function App() {
             <Route path={path.PERSONAL} element={<Personal/>} />
             <Route path={path.MY_CART} element={<DetailCart/>} />
             <Route path={path.WISHLIST} element={<Wishlist/>} />
-            <Route path={path.HISTORY} element={<History/>} />
-
         </Route>
 
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />} />
